@@ -64,7 +64,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 resource "azurerm_network_security_group" "myterraformnsg" {
     name                = "myNetworkSecurityGroup"
     location            = "francecentral"
-    resource_group_name = azurerm_resource_group.myterraformgroup.name
+    resource_group_name = azurerm_resource_group.saptestautodeploygroup.name
 
     security_rule {
         name                       = "SSH"
@@ -128,7 +128,7 @@ resource "random_id" "randomId" {
 ///with the name based on the random text generated in the preceding step:
 resource "azurerm_storage_account" "mystorageaccount" {
     name                        = "diag${random_id.randomId.hex}"
-    resource_group_name         = azurerm_resource_group.myterraformsubnet.name
+    resource_group_name         = azurerm_resource_group.saptestautodeploygroup.name
     location                    = "francecentral"
     account_replication_type    = "LRS"
     account_tier                = "Standard"
@@ -155,7 +155,7 @@ output "tls_private_key" { value = tls_private_key.example_ssh.private_key_pem }
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
     name                  = "myVM"
     location              = "francecentral"
-    resource_group_name   = azurerm_resource_group.myterraformgroup.name
+    resource_group_name   = azurerm_resource_group.saptestautodeploygroup.name
     network_interface_ids = [azurerm_network_interface.myterraformnic.id]
     size                  = "Standard_D8s_v3"
 
