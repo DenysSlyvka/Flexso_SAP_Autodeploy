@@ -50,7 +50,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = "francecentral"
     resource_group_name          = azurerm_resource_group.saptestautodeploygroup.name
-    allocation_method            = "Dynamic"
+    allocation_method            = "Static"
 
     tags = {
         environment = "Terraform SAP Automation Demo"
@@ -152,6 +152,13 @@ resource "tls_private_key" "example_ssh" {
 
 output "tls_private_key" { value = tls_private_key.example_ssh.private_key_pem }
 
+
+///Collect public IP once VM has booted
+# data "azurerm_public_ip" "publicip" {
+#   name                = azurerm_public_ip.myterraformpublicip.name
+#   resource_group_name = azurerm_resource_group.saptestautodeploygroup.name
+# }
+
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
     name                  = "myVM"
     location              = "francecentral"
@@ -163,12 +170,13 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
         name              = "myOsDisk"
         caching           = "ReadWrite"
         storage_account_type = "Premium_LRS"
+        disk_size_gb = "256"
     }
 
     source_image_reference {
-        publisher = "Canonical"
-        offer     = "UbuntuServer"
-        sku       = "18.04-LTS"
+        publisher = "RedHat"
+        offer     = "RHEL-SAP-HANA"
+        sku       = "7.2"
         version   = "latest"
     }
 
@@ -183,6 +191,41 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
     boot_diagnostics {
         storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
+    }
+    ///Make SSH connection
+    connection {
+            type        = "ssh"
+            user        = "azureuser"
+            private_key = tls_private_key.example_ssh.private_key_pem
+            host        = azurerm_public_ip.myterraformpublicip.ip_address
+            agent       = "false"
+    }
+
+    # provisioner "local-exec" {
+    #     command = "ssh -i ${tls_private_key.example_ssh.private_key_pem} azureuser@ ${azurerm_public_ip.myterraformpublicip.ip_address}"
+    # }
+    provisioner "file" {
+        source      = "centos1.repo"
+        destination = "/var/tmp/centos1.repo"
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "echo Move centos1.repo to /etc/yum.repos.d/",
+            "sudo mv /var/tmp/centos1.repo /etc/yum.repos.d/",
+            "echo chowning rooting repoing",
+            "sudo chown root:root /etc/yum.repos.d/centos1.repo",
+            "echo updating repos",
+            "sudo yum update -y --disablerepo='*' --enablerepo='*microsoft*'",
+            "echo installing EPEL Repo",
+            "sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y",
+            "echo disable bad repo",
+            "sudo yum-config-manager --disable rhel-ha-for-rhel-7-server-eus-rhui-rpms",
+            "echo yummington installington nmappington -y",
+            "sudo yum install nmap -y",
+            "echo yumming installing ansible",
+            "sudo yum -y install ansible"
+        ]  
+        on_failure = continue
     }
 
     tags = {
