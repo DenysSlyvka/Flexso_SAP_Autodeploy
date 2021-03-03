@@ -1,8 +1,7 @@
 # main playbook
 ---
-- hosts: myVM
+- hosts: localhost
   become: true
-  
   tasks:
     - name: echo "hello world"
       ansible.builtin.command: echo hello world
