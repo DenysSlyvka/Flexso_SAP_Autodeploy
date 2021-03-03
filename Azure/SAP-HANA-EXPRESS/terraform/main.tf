@@ -223,7 +223,9 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
             "echo yummington installington nmappington -y",
             "sudo yum install nmap -y",
             "echo yumming installing ansible",
-            "sudo yum -y install ansible"
+            "sudo yum -y install ansible",
+            "echo yummington install gittington",
+            "sudo yum install git"
         ]  
         on_failure = continue
     }
