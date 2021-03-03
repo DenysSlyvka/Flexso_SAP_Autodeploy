@@ -2,6 +2,6 @@
 ---
 - hosts: localhost
   become: true
+  roles:
+    - 
   tasks:
-    - name: echo "hello world"
-      ansible.builtin.command: echo hello world
