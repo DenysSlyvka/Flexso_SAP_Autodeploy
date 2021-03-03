@@ -1,22 +1,8 @@
 # roles/ROLENAME/tasks/main.yml
 ---
 
-- include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-  tags: ROLENAME
+- name: Include OS-specific variables
+  include_vars: RedHat.yml
 
-- name: Install packages
-  package:
-    name: "{{ item }}"
-    state: installed
-  with_items: "{{ ROLENAME_packages }}"
-  tags: ROLENAME
-
-- name: Ensure service is started
-  service:
-    name: "{{ ROLENAME_service }}"
-    state: started
-    enabled: true
-  tags: ROLENAME
+- include_tasks: RedHat.yml
+  when: ansible_os_family == 'RedHat'
