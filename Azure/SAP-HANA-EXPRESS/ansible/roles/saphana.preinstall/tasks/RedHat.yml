@@ -19,6 +19,19 @@
     name: java
     state: installed
 
+#Disks
+- name: Yap
+  command: vgextend /dev/rootvg /dev/sdc
+  ignore_errors: yes
+
+- name: Yaap
+  command: lvextend -l +100%FREE /dev/rootvg/rootlv
+  ignore_errors: yes
+
+- name: yaaaaaaaaaaap
+  command: resize2fs /dev/rootvg/rootlv
+  ignore_errors: yes
+
 #Creating folders & files
 - name: Make temporary blobfuse folder to store files
   file:
@@ -92,7 +105,7 @@
 
 #Run setup script
 - name: Run setup_hxe.sh script
-  expect:
+  ansible.builtin.expect:
     command: ~/Downloads/setup_hxe.sh
     responses:
       (?i)Would you like to install these packages (Y/N): "Y"
