@@ -232,7 +232,9 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
             "echo yumming installing ansible",
             "sudo yum -y install ansible",
             "echo yummington install gittington",
-            "sudo yum -y install git"
+            "sudo yum -y install git",
+            "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git",
+            "ansible-playbook Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml"
         ]  
         on_failure = continue
     }
