@@ -1,0 +1,5 @@
+# roles/ROLENAME/defaults/main.yml
+---
+account_name: cs410037ffea167f1b9
+account_key: yep
+container_name: test-sap-templates

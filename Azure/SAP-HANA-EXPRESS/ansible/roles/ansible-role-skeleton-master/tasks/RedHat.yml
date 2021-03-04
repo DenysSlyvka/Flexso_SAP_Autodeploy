@@ -1,6 +1,0 @@
----
-
-- name: install Compat-SAP-C++
-  package:
-    name: "{{ compat_packages }}"
-    state: installed

@@ -1,0 +1,53 @@
+---
+#Installs
+- name: Installing Compat-SAP-C++
+  package:
+    name: "{{ compat_packages }}"
+    state: installed
+
+- name: Installing linux package repository for microsoft products
+  command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
+
+- name: Installing blobfuse
+  yum:
+    name: blobfuse
+    state: installed
+
+#Creating folders & files
+- name: Make temporary blobfuse folder to store files
+  file:
+    path: /mnt/resource/blobfusetmp
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+- name: Create fuse_connection.cfg file in /blobfusetmp
+  file:
+    path: /mnt/resource/blobfusetmp/fuse_connection.cfg
+    mode: '600'
+    owner: root
+    group: root
+
+- name: Write to fuse_connection.cfg
+  copy:
+    dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
+    content: |
+      accountName {{ account_name }}
+      accountKey {{ account_key }}
+      containerName {{ container_name }}
+
+- name: Create ~/mycontainer to store files from Azure
+  file:
+    path: ~/mycontainer
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+#Connecting to azure
+- name: Connect with Azure container
+  command: blobfuse /home/mycontainer --tmp-path=/mnt/resource/blobfusetmp --config-file=/mnt/resource/blobfusetmp/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
+
+- name: Copy HXEDownloadManager_Linux.bin to /home/azureuser
+  command: cp /mnt/resource/blobfusetmp/HXEDownloadMANAGER_Linux.bin /home/azureuser
