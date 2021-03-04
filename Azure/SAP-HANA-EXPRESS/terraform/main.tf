@@ -19,13 +19,13 @@ provider "azurerm" {
 //Create virtual network
 ///The following section creates a resource group named Flexso-Stage-TestEnv in the francecentral location:
 resource "azurerm_resource_group" "saptestautodeploygroup" {
-  name = "Flexso-Stage-TestEnv"
+  name = "Flexso-Stage-TestEn-TestDisks"
   location = "francecentral"
 }
 
 ///The following section creates a virtual network named myVnet in the 10.0.0.0/16 address space:
 resource "azurerm_virtual_network" "myterraformnetworktest" {
-    name                = "myVnet"
+    name                = "myVnet-testDisks"
     address_space       = ["10.0.0.0/16"]
     location            = "francecentral"
     resource_group_name = azurerm_resource_group.saptestautodeploygroup.name
@@ -170,7 +170,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
         name              = "myOsDisk"
         caching           = "ReadWrite"
         storage_account_type = "Premium_LRS"
-        disk_size_gb = "256"
+        disk_size_gb = 256
     }
 
     source_image_reference {
@@ -192,6 +192,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     boot_diagnostics {
         storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
     }
+    /*
     ///Make SSH connection
     connection {
             type        = "ssh"
@@ -200,14 +201,20 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
             host        = azurerm_public_ip.myterraformpublicip.ip_address
             agent       = "false"
     }
+*/
+    provisioner "local-exec" {
+        command = "ssh -i ${tls_private_key.example_ssh.private_key_pem} azureuser@${azurerm_public_ip.myterraformpublicip.ip_address}"
+        depends_on = [
+            azurerm_public_ip.myterraformpublicip
+        ]
+     }
 
-    # provisioner "local-exec" {
-    #     command = "ssh -i ${tls_private_key.example_ssh.private_key_pem} azureuser@ ${azurerm_public_ip.myterraformpublicip.ip_address}"
-    # }
+/*
     provisioner "file" {
         source      = "centos1.repo"
         destination = "/var/tmp/centos1.repo"
     }
+
     provisioner "remote-exec" {
         inline = [
             "echo Move centos1.repo to /etc/yum.repos.d/",
@@ -229,8 +236,26 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
         ]  
         on_failure = continue
     }
-
+*/
     tags = {
         environment = "Terraform Demo"
     }
 }
+
+/*
+resource "azurerm_managed_disk" "example" {
+  name                 = "myvm-disk1"
+  location             = azurerm_resource_group.saptestautodeploygroup.location
+  resource_group_name  = azurerm_resource_group.saptestautodeploygroup.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 256
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "example" {
+  managed_disk_id    = azurerm_managed_disk.example.id
+  virtual_machine_id = azurerm_linux_virtual_machine.myterraformvm.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
+*/
