@@ -192,7 +192,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     boot_diagnostics {
         storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
     }
-    /*
+    
     ///Make SSH connection
     connection {
             type        = "ssh"
@@ -201,7 +201,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
             host        = azurerm_public_ip.myterraformpublicip.ip_address
             agent       = "false"
     }
-*/
+
     provisioner "local-exec" {
         command = "ssh -i ${tls_private_key.example_ssh.private_key_pem} azureuser@${azurerm_public_ip.myterraformpublicip.ip_address}"
         depends_on = [
@@ -209,7 +209,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
         ]
      }
 
-/*
+
     provisioner "file" {
         source      = "centos1.repo"
         destination = "/var/tmp/centos1.repo"
@@ -236,13 +236,13 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
         ]  
         on_failure = continue
     }
-*/
+
     tags = {
         environment = "Terraform Demo"
     }
 }
 
-/*
+
 resource "azurerm_managed_disk" "example" {
   name                 = "myvm-disk1"
   location             = azurerm_resource_group.saptestautodeploygroup.location
@@ -258,4 +258,3 @@ resource "azurerm_virtual_machine_data_disk_attachment" "example" {
   lun                = "10"
   caching            = "ReadWrite"
 }
-*/
