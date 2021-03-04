@@ -7,10 +7,16 @@
 
 - name: Installing linux package repository for microsoft products
   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
+  ignore_errors: yes
 
 - name: Installing blobfuse
   yum:
     name: blobfuse
+    state: installed
+
+- name: Installing java uwu
+  yum:
+    name: java
     state: installed
 
 #Creating folders & files
@@ -25,6 +31,7 @@
 - name: Create fuse_connection.cfg file in /blobfusetmp
   file:
     path: /mnt/resource/blobfusetmp/fuse_connection.cfg
+    state: touch
     mode: '600'
     owner: root
     group: root
@@ -47,7 +54,54 @@
 
 #Connecting to azure
 - name: Connect with Azure container
-  command: blobfuse /home/mycontainer --tmp-path=/mnt/resource/blobfusetmp --config-file=/mnt/resource/blobfusetmp/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
+  command: blobfuse ~/mycontainer --tmp-path=/mnt/resource/blobfusetmp --config-file=/mnt/resource/blobfusetmp/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
+  ignore_errors: yes
 
-- name: Copy HXEDownloadManager_Linux.bin to /home/azureuser
-  command: cp /mnt/resource/blobfusetmp/HXEDownloadMANAGER_Linux.bin /home/azureuser
+#Copy .bin file from shared folder to server
+- name: Copy HXEDownloadManager_Linux.bin to ~ Directory
+  command: cp mnt/resource/blobfusetmp /HXEDownloadMANAGER_Linux.bin ~
+
+#Create downloads folder
+- name: Create ~/Downloads directory
+  file:
+    path: /root/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
+- name: List contents of ~/Downloads
+  command: ls ~/Downloads
+  register: contents
+
+- name: Download hxe.tgz and hxexsa.tgz
+  command: ~/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz hxexsa.tgz
+  when: contents.stdout == ""
+
+#Unarchive .tars
+- name: Extract hxe.tgz
+  unarchive:
+    src: ~/Downloads/hxe.tgz
+    dest: ~/Downloads
+
+- name: Extract hxexsa.tgz
+  unarchive:
+    src: ~/Downloads/hxexsa.tgz
+    dest: ~/Downloads
+
+#Run setup script
+- name: Run setup_hxe.sh script
+  expect:
+    command: ~/Downloads/setup_hxe.sh
+    responses:
+      (?i)Would you like to install these packages (Y/N): "Y"
+      (?i)HANA, express edition installer root directory [/root/Downloads/HANA_EXPRESS_20]: "/root/Downloads/HANA_EXPRESS_20"
+      (?i)Enter SAP HANA system ID [HXE]: "A10"
+      (?i)Enter instance number [90]: "14"
+      (?i)Component [all]: "all"
+      (?i)Enter local host name(.*?): ""
+      (?i)Enter HDB master password: "Admin2020"
+      (?i)Confirm "HDB master" password: "Admin2020"
+      (?i)Do you need to use proxy server to access the internet? [N] : ""
+      (?i)Proceed with installation? (Y/N) : "Y"
