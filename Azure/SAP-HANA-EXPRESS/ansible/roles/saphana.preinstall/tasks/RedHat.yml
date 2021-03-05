@@ -108,37 +108,38 @@
     src: ~/Downloads/hxexsa.tgz
     dest: ~/Downloads
 
+
 #Run setup script
-- name: Run setup_hxe.sh script
-  shell: |
-    ~/Downloads/setup_hxe.sh
-    expect "Would you like to install these packages (Y/N):" 
-    send "Y"
-
-    expect "HANA, express edition installer root directory [/root/Downloads/HANA_EXPRESS_20]:" 
-    send "/root/Downloads/HANA_EXPRESS_20"
-
-    expect "Enter SAP HANA system ID [HXE]:" 
-    send "A10"
-
-    expect "Enter instance number [90]:" 
-    send "14"
-    
-    expect "Component [all]:" 
-    send "all"
-    expect "Enter local host name(.*?):" 
-    send ""
-
-    expect "Enter HDB master password:" 
-    send "Admin2020"
-    
-    expect "Confirm "HDB master" password:" 
-    send "Admin2020"
-    
-    expect "Do you need to use proxy server to access the internet? [N] :" 
-    send ""
-    
-    expect "Proceed with installation? (Y/N) :" 
-    send "Y"
-  args:
-    executable: /usr/bin/expect
+#- name: Run setup_hxe.sh script
+#  shell: |
+#    ~/Downloads/setup_hxe.sh
+#    expect "Would you like to install these packages (Y/N):" 
+#    send "Y"
+#
+#    expect "HANA, express edition installer root directory [/root/Downloads/HANA_EXPRESS_20]:" 
+#    send "/root/Downloads/HANA_EXPRESS_20"
+#
+#    expect "Enter SAP HANA system ID [HXE]:" 
+#    send "A10"
+#
+#    expect "Enter instance number [90]:" 
+#    send "14"
+#    
+#    expect "Component [all]:" 
+#    send "all"
+#    expect "Enter local host name(.*?):" 
+#    send ""
+#
+#    expect "Enter HDB master password:" 
+#    send "Admin2020"
+#    
+#    expect "Confirm "HDB master" password:" 
+#    send "Admin2020"
+#    
+#    expect "Do you need to use proxy server to access the internet? [N] :" 
+#    send ""
+#    
+#    expect "Proceed with installation? (Y/N) :" 
+#    send "Y"
+#  args:
+#S    executable: /usr/bin/expect
