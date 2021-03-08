@@ -102,24 +102,32 @@
   when: contents.stdout == ""
 
 #Unarchive .tars
+- name: Make /SAP folder in root
+  file:
+    path: /SAP
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
 - name: Extract hxe.tgz
   unarchive:
     src: ~/Downloads/hxe.tgz
-    dest: ~/Downloads
+    dest: /SAP
 
 - name: Extract hxexsa.tgz
   unarchive:
     src: ~/Downloads/hxexsa.tgz
-    dest: ~/Downloads
+    dest: /SAP
 
 
 #Run setup script
 - name: Run setup_hxe.sh script
   expect: 
-    command: ~/Downloads/setup_hxe.sh
+    command: sh /SAP/setup_hxe.sh
     responses:
       'Would you like to install these packages \(Y/N\):' : 'Y'
-      'HANA, express edition installer root directory \[/root/Downloads/HANA_EXPRESS_20\]:' : "\n"
+      'HANA, express edition installer root directory \[/SAP/HANA_EXPRESS_20\]:' : "\n"
       'Enter SAP HANA system ID \[HXE\]:' : 'A10'
       'Enter instance number \[90\]:' : '14'
       'Component \[all\]:' : "\n"
