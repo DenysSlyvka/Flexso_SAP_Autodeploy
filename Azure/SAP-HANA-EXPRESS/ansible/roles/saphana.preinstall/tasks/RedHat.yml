@@ -145,5 +145,5 @@
    
    expect "Proceed with installation? (Y/N) :" 
    send "Y"
- args:
+  args:
   executable: /usr/bin/expect
