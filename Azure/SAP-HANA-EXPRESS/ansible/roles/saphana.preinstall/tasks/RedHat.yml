@@ -136,4 +136,5 @@
       'Confirm "HDB master" password:' : 'Admin2020'
       'Do you need to use proxy server to access the internet\? \[N\] :' : "\n"
       'Proceed with installation\? \(Y/N\) :' : 'Y'
+      'Do you want to install XSA\? \(Y/N\):': 'Y'
     echo: yes
