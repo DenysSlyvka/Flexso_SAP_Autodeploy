@@ -115,7 +115,7 @@
 
 #Run setup script
 - name: Run setup_hxe.sh script
- shell: |
+  shell: |
    /root/Downloads/setup_hxe.sh
    expect "Would you like to install these packages (Y/N):" 
    send "Y"
