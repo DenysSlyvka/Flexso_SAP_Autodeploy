@@ -25,7 +25,7 @@
     state: installed
 
 #Disks
-- name: Sleep for 30 seconds before creating physical volume
+- name: Sleep for 300 seconds before creating physical volume
   wait_for:
     timeout: 300
 
@@ -86,7 +86,7 @@
 #Create downloads folder
 - name: Create ~/Downloads directory
   file:
-    path: /root/Downloads
+    path: ~/Downloads
     state: directory
     mode: '0777'
     owner: root
@@ -94,7 +94,7 @@
 
 #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
 - name: List contents of ~/Downloads
-  command: ls /root/Downloads
+  command: ls ~/Downloads
   register: contents
 
 - name: Download hxe.tgz and hxexsa.tgz
@@ -104,46 +104,28 @@
 #Unarchive .tars
 - name: Extract hxe.tgz
   unarchive:
-    src: /root/Downloads/hxe.tgz
-    dest: /root/Downloads
+    src: ~/Downloads/hxe.tgz
+    dest: ~/Downloads
 
 - name: Extract hxexsa.tgz
   unarchive:
-    src: /root/Downloads/hxexsa.tgz
-    dest: /root/Downloads
+    src: ~/Downloads/hxexsa.tgz
+    dest: ~/Downloads
 
 
 #Run setup script
 - name: Run setup_hxe.sh script
-  shell: |
-   /root/Downloads/setup_hxe.sh
-   expect "Would you like to install these packages (Y/N):" 
-   send "Y"
-
-   expect "HANA, express edition installer root directory [/root/Downloads/HANA_EXPRESS_20]:" 
-   send "/root/Downloads/HANA_EXPRESS_20"
-
-   expect "Enter SAP HANA system ID [HXE]:" 
-   send "A10"
-
-   expect "Enter instance number [90]:" 
-   send "14"
-   
-   expect "Component [all]:" 
-   send "all"
-   expect "Enter local host name(.*?):" 
-   send ""
-
-   expect "Enter HDB master password:" 
-   send "Admin2020"
-   
-   expect "Confirm \"HDB master\" password:" 
-   send "Admin2020"
-   
-   expect "Do you need to use proxy server to access the internet? [N] :" 
-   send ""
-   
-   expect "Proceed with installation? (Y/N) :" 
-   send "Y"
-  args:
-  executable: /usr/bin/expect
+  expect: 
+    command: ~/Downloads/setup_hxe.sh
+    responses:
+      'Would you like to install these packages \(Y/N\):' : 'Y'
+      'HANA, express edition installer root directory \[/root/Downloads/HANA_EXPRESS_20\]:' : "\n"
+      'Enter SAP HANA system ID \[HXE\]:' : 'A10'
+      'Enter instance number \[90\]:' : '14'
+      'Component \[all\]:' : "\n"
+      'Enter local host name \[(.*?)\]:' : "\n"
+      'Enter HDB master password:' : 'Admin2020'
+      'Confirm "HDB master" password:' : 'Admin2020'
+      'Do you need to use proxy server to access the internet\? \[N\] :' : "\n"
+      'Proceed with installation\? \(Y/N\) :' : 'Y'
+    echo: pogchamp
