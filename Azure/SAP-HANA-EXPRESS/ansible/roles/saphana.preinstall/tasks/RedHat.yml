@@ -25,15 +25,19 @@
     state: installed
 
 #Disks
-- name: Yap
+- name: Sleep for 30 seconds before creating physical volume
+  wait_for:
+    timeout: 30
+
+- name: vgextend /dev/rootvg /dev/sdc
   command: vgextend /dev/rootvg /dev/sdc
   ignore_errors: yes
 
-- name: Yaap
+- name: lvextend -l +100%FREE /dev/rootvg/rootlv
   command: lvextend -l +100%FREE /dev/rootvg/rootlv
   ignore_errors: yes
 
-- name: yaaaaaaaaaaap
+- name: resize2fs /dev/rootvg/rootlv
   command: resize2fs /dev/rootvg/rootlv
   ignore_errors: yes
 
@@ -142,4 +146,4 @@
 #    expect "Proceed with installation? (Y/N) :" 
 #    send "Y"
 #  args:
-#S    executable: /usr/bin/expect
+#   executable: /usr/bin/expect
