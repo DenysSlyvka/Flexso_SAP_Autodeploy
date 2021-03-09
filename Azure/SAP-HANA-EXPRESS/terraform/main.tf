@@ -159,6 +159,25 @@ output "tls_private_key" { value = tls_private_key.example_ssh.private_key_pem }
 #   resource_group_name = azurerm_resource_group.saptestautodeploygroup.name
 # }
 
+
+
+resource "azurerm_managed_disk" "example" {
+  name                 = "myvm-disk1"
+  location             = azurerm_resource_group.saptestautodeploygroup.location
+  resource_group_name  = azurerm_resource_group.saptestautodeploygroup.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 256
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "example" {
+  managed_disk_id    = azurerm_managed_disk.example.id
+  virtual_machine_id = azurerm_linux_virtual_machine.myterraformvm.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
+
+
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
     name                  = "myVM"
     location              = "francecentral"
@@ -246,7 +265,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
             "echo yummington install gittington",
             "sudo yum -y install git",
             "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git",
-            "sudo ansible-playbook -vvv ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml"
+            "sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml"
         ]  
         on_failure = continue
     }
@@ -254,21 +273,4 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     tags = {
         environment = "Terraform Demo"
     }
-}
-
-
-resource "azurerm_managed_disk" "example" {
-  name                 = "myvm-disk1"
-  location             = azurerm_resource_group.saptestautodeploygroup.location
-  resource_group_name  = azurerm_resource_group.saptestautodeploygroup.name
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = 256
-}
-
-resource "azurerm_virtual_machine_data_disk_attachment" "example" {
-  managed_disk_id    = azurerm_managed_disk.example.id
-  virtual_machine_id = azurerm_linux_virtual_machine.myterraformvm.id
-  lun                = "10"
-  caching            = "ReadWrite"
 }

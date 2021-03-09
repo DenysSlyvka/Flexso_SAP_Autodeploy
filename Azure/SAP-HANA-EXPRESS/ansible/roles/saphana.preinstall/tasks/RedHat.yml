@@ -25,9 +25,9 @@
     state: installed
 
 #Disks
-- name: Sleep for 300 seconds before creating physical volume
+- name: Sleep for 60 seconds before creating physical volume
   wait_for:
-    timeout: 300
+    timeout: 60
 
 - name: vgextend /dev/rootvg /dev/sdc
   command: vgextend /dev/rootvg /dev/sdc
