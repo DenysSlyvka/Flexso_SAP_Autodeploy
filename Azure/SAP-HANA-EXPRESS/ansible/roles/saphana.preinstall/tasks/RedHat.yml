@@ -122,19 +122,22 @@
 
 
 #Run setup script
-# - name: Run setup_hxe.sh script
-#   expect: 
-#     command: sh /SAP/setup_hxe.sh
-#     responses:
-#       'Would you like to install these packages \(Y/N\):' : 'Y'
-#       'HANA, express edition installer root directory \[/SAP/HANA_EXPRESS_20\]:' : "\n"
-#       'Enter SAP HANA system ID \[HXE\]:' : 'A10'
-#       'Enter instance number \[90\]:' : '14'
-#       'Component \[all\]:' : "\n"
-#       'Enter local host name \[(.*?)\]:' : "\n"
-#       'Enter HDB master password:' : 'Admin2020'
-#       'Confirm "HDB master" password:' : 'Admin2020'
-#       'Do you need to use proxy server to access the internet\? \[N\] :' : "\n"
-#       'Proceed with installation\? \(Y/N\) :' : 'Y'
-#       'Do you want to install XSA\? \(Y/N\):': 'Y'
-#     echo: yes
+- name: Run setup_hxe.sh script
+  expect: 
+    command: sh /SAP/setup_hxe.sh
+    responses:
+      'Would you like to install these packages \(Y/N\):' : 'Y'
+      'HANA, express edition installer root directory \[/SAP/HANA_EXPRESS_20\]:' : "\n"
+      'Enter SAP HANA system ID \[HXE\]:' : 'A10'
+      'Enter instance number \[90\]:' : '14'
+      'Component \[all\]:' : "\n"
+      'Enter local host name \[(.*?)\]:' : "\n"
+      'Enter HDB master password:' : 'Admin2020'
+      'Confirm "HDB master" password:' : 'Admin2020'
+      'Do you need to use proxy server to access the internet\? \[N\] :' : "\n"
+      'Proceed with installation\? \(Y/N\) :' : 'Y'
+      'Do you want to install XSA\? \(Y/N\):': 'Y'
+    echo: yes
+    timeout: null
+    register: script
+- debug: var=script.stdout_lines
