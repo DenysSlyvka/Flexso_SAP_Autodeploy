@@ -19,7 +19,7 @@ provider "azurerm" {
 //Create virtual network
 ///The following section creates a resource group named Flexso-Stage-TestEnv in the francecentral location:
 resource "azurerm_resource_group" "saptestautodeploygroup" {
-  name = "Flexso-Stage-TestEnv-Werner"
+  name = "Flexso-Stage-TestEnv-Werner2"
   location = "francecentral"
 }
 
@@ -226,12 +226,12 @@ resource "null_resource" "provision_vm" {
             agent       = "false"
     }
 
-    # provisioner "local-exec" {
-    #     command = "ssh -i ${tls_private_key.example_ssh.private_key_pem} azureuser@${azurerm_public_ip.myterraformpublicip.ip_address}"
-    #     depends_on = [
-    #         azurerm_public_ip.myterraformpublicip
-    #     ]
-    #  }
+#     # provisioner "local-exec" {
+#     #     command = "ssh -i ${tls_private_key.example_ssh.private_key_pem} azureuser@${azurerm_public_ip.myterraformpublicip.ip_address}"
+#     #     depends_on = [
+#     #         azurerm_public_ip.myterraformpublicip
+#     #     ]
+#     #  }
 
 
     provisioner "file" {
