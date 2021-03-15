@@ -93,9 +93,9 @@
   when: contents.stdout == ""
 
 #Unarchive .tars
-- name: Make /HANA folder in root
+- name: Make /SAP folder in root
   file:
-    path: /HANA
+    path: /SAP
     state: directory
     mode: '0777'
     owner: root
@@ -104,15 +104,11 @@
 - name: Extract hxe.tgz
   unarchive:
     src: ~/Downloads/hxe.tgz
-    dest: /HANA
+    dest: /SAP
 
-# - name: Extract hxexsa.tgz
-#   unarchive:
-#     src: ~/Downloads/hxexsa.tgz
-#     dest: /HANA
+- name: Extract hxexsa.tgz
+  unarchive:
+    src: ~/Downloads/hxexsa.tgz
+    dest: /SAP
 
-- name: Copy configuration an and password file into HDBLCM and run in batch mode
-  command: cat /tmp/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/tmp/install.rsp -b
-  ignore_errors: yes
-  register: config
-- debug: var=config.stdout_lines
+#./hdblcm -b --configfile=config.cfg
