@@ -252,19 +252,27 @@ resource "null_resource" "provision_vm" {
             "echo disable bad repo",
             "sudo yum-config-manager --disable rhel-ha-for-rhel-7-server-eus-rhui-rpms",
             "echo yuminstall nmap -y",
-            "sudo yum install nmap -y",
-            "echo install compat-sap-c++-7-7.2.1-2.el7_4",
-            "sudo rpm -ivh ftp://ftp.pbone.net/mirror/ftp.scientificlinux.org/linux/scientific/7.8/x86_64/os/Packages/compat-sap-c++-7-7.2.1-2.el7_4.x86_64.rpm",
-            "echo install litool-ltdl",
-            "sudo yum install -y libtool-ltdl",
-            "echo install libatomic",
-            "sudo yum install -y libatomic",
+            "sudo yum install nmap -y", 
+
+            "echo install pexpect", 
+            "sudo cd /etc/yum.repos.d/", 
+            "echo downloading pexpect 3.3 repo into yum", 
+            "sudo wget https://download.opensuse.org/repositories/home:uibmz:opsi:opsi40/RHEL_7/home:uibmz:opsi:opsi40.repo", 
+            "echo installing python with yum", 
+            "sudo yum install -y python-pexpect", 
+
+            "echo install compat-sap-c++-7-7.2.1-2.el7_4",  
+            "sudo rpm -ivh ftp://ftp.pbone.net/mirror/ftp.scientificlinux.org/linux/scientific/7.8/x86_64/os/Packages/compat-sap-c++-7-7.2.1-2.el7_4.x86_64.rpm", 
+            "echo install litool-ltdl",  
+            "sudo yum install -y libtool-ltdl", 
+            "echo install libatomic", 
+            "sudo yum install -y libatomic", 
             "echo install ansbile",
             "sudo yum install -y ansible",
-            "echo yum install git",
-            "sudo yum -y install git",
-            "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git",
-            "sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml"
+            "echo yum install git", 
+            "sudo yum -y install git", 
+            "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git", 
+            "sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
         ]  
         on_failure = continue
     }

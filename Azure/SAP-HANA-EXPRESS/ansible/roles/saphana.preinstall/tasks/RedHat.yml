@@ -112,7 +112,7 @@
 #     dest: /HANA
 
 
-Run setup script
+#Run setup script
 - name: Run setup_hxe.sh script
   expect: 
     command: sh /HANA/setup_hxe.sh
