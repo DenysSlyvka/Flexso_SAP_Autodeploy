@@ -1,0 +1,114 @@
+---
+#Installs
+- name: Installing Compat-SAP-C++
+  package:
+    name: "{{ compat_packages }}"
+    state: installed
+
+- name: Installing linux package repository for microsoft products
+  command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
+  ignore_errors: yes
+
+- name: Installing blobfuse
+  yum:
+    name: blobfuse
+    state: installed
+
+- name: Installing java
+  yum:
+    name: java
+    state: installed
+
+#Disks
+- name: vgextend /dev/rootvg /dev/sdc
+  command: vgextend /dev/rootvg /dev/sdc
+  ignore_errors: yes
+
+- name: lvextend -l +100%FREE /dev/rootvg/rootlv
+  command: lvextend -l +100%FREE /dev/rootvg/rootlv
+  ignore_errors: yes
+
+- name: resize2fs /dev/rootvg/rootlv
+  command: resize2fs /dev/rootvg/rootlv
+  ignore_errors: yes
+
+#Creating folders & files
+- name: Make temporary blobfuse folder to store files
+  file:
+    path: /mnt/resource/blobfusetmp
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+- name: Create fuse_connection.cfg file in /blobfusetmp
+  file:
+    path: /mnt/resource/blobfusetmp/fuse_connection.cfg
+    state: touch
+    mode: '600'
+    owner: root
+    group: root
+
+- name: Write to fuse_connection.cfg
+  copy:
+    dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
+    content: |
+      accountName {{ account_name }}
+      accountKey {{ account_key }}
+      containerName {{ container_name }}
+
+- name: Create ~/mycontainer to store files from Azure
+  file:
+    path: ~/mycontainer
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+#Connecting to azure
+- name: Connect with Azure container
+  command: blobfuse ~/mycontainer --tmp-path=/mnt/resource/blobfusetmp --config-file=/mnt/resource/blobfusetmp/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
+  ignore_errors: yes
+
+#Copy .bin file from shared folder to server
+- name: Copy HXEDownloadManager_Linux.bin to ~ Directory
+  command: cp ~/mycontainer/HXEDownloadManager_linux.bin ~
+
+#Create downloads folder
+- name: Create ~/Downloads directory
+  file:
+    path: ~/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
+- name: List contents of ~/Downloads
+  command: ls ~/Downloads
+  register: contents
+
+- name: Download hxe.tgz and hxexsa.tgz
+  command: ~/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz hxexsa.tgz
+  when: contents.stdout == ""
+
+#Unarchive .tars
+- name: Make /SAP folder in root
+  file:
+    path: /SAP
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+- name: Extract hxe.tgz
+  unarchive:
+    src: ~/Downloads/hxe.tgz
+    dest: /SAP
+
+- name: Extract hxexsa.tgz
+  unarchive:
+    src: ~/Downloads/hxexsa.tgz
+    dest: /SAP
+
+#./hdblcm -b --configfile=config.cfg
