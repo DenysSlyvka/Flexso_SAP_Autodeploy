@@ -281,7 +281,7 @@ resource "null_resource" "provision_vm" {
             "echo yum install git", 
             "sudo yum -y install git", 
             "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git", 
-            #"sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
+            "sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
         ]  
         on_failure = continue
     }
