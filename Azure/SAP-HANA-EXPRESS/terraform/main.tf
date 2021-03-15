@@ -19,7 +19,7 @@ provider "azurerm" {
 //Create virtual network
 ///The following section creates a resource group named Flexso-Stage-TestEnv in the francecentral location:
 resource "azurerm_resource_group" "saptestautodeploygroup" {
-  name = "Flexso-Stage-TestEnv-Denys"
+  name = "Flexso-Stage-TestEnv-Denys2"
   location = "francecentral"
 }
 
@@ -239,6 +239,17 @@ resource "null_resource" "provision_vm" {
         destination = "/var/tmp/centos1.repo"
     }
 
+    provisioner "file" {
+        source      = "install.rsp"
+        destination = "/tmp/install.rsp"
+    }
+
+    provisioner "file" {
+        source      = "install.rsp.xml"
+        destination = "/tmp/install.rsp.xml"
+    }
+
+
     provisioner "remote-exec" {
         inline = [
             "echo Move centos1.repo to /etc/yum.repos.d/",
@@ -253,14 +264,12 @@ resource "null_resource" "provision_vm" {
             "sudo yum-config-manager --disable rhel-ha-for-rhel-7-server-eus-rhui-rpms",
             "echo yuminstall nmap -y",
             "sudo yum install nmap -y", 
-
             "echo install pexpect", 
             "sudo cd /etc/yum.repos.d/", 
             "echo downloading pexpect 3.3 repo into yum", 
             "sudo wget https://download.opensuse.org/repositories/home:uibmz:opsi:opsi40/RHEL_7/home:uibmz:opsi:opsi40.repo", 
             "echo installing python with yum", 
             "sudo yum install -y python-pexpect", 
-
             "echo install compat-sap-c++-7-7.2.1-2.el7_4",  
             "sudo rpm -ivh ftp://ftp.pbone.net/mirror/ftp.scientificlinux.org/linux/scientific/7.8/x86_64/os/Packages/compat-sap-c++-7-7.2.1-2.el7_4.x86_64.rpm", 
             "echo install litool-ltdl",  
@@ -272,7 +281,7 @@ resource "null_resource" "provision_vm" {
             "echo yum install git", 
             "sudo yum -y install git", 
             "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git", 
-            "sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
+            #"sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
         ]  
         on_failure = continue
     }
