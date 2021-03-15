@@ -19,7 +19,7 @@ provider "azurerm" {
 //Create virtual network
 ///The following section creates a resource group named Flexso-Stage-TestEnv in the francecentral location:
 resource "azurerm_resource_group" "saptestautodeploygroup" {
-  name = "Flexso-Stage-TestEnv-Werner"
+  name = "Flexso-Stage-TestEnv-Denys"
   location = "francecentral"
 }
 
