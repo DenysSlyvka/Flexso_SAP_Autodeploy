@@ -1,134 +1,118 @@
-# ---
-# #Installs
-# - name: Installing Compat-SAP-C++
-#   package:
-#     name: "{{ compat_packages }}"
-#     state: installed
+---
+#Installs
+- name: Installing Compat-SAP-C++
+  package:
+    name: "{{ compat_packages }}"
+    state: installed
 
-# - name: Installing linux package repository for microsoft products
-#   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
-#   ignore_errors: yes
+- name: Installing linux package repository for microsoft products
+  command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
+  ignore_errors: yes
 
-# - name: Installing blobfuse
-#   yum:
-#     name: blobfuse
-#     state: installed
+- name: Installing blobfuse
+  yum:
+    name: blobfuse
+    state: installed
 
-# - name: Installing java
-#   yum:
-#     name: java
-#     state: installed
+- name: Installing java
+  yum:
+    name: java
+    state: installed
 
-# #Disks
-# - name: vgextend /dev/rootvg /dev/sdc
-#   command: vgextend /dev/rootvg /dev/sdc
-#   ignore_errors: yes
+#Disks
+- name: vgextend /dev/rootvg /dev/sdc
+  command: vgextend /dev/rootvg /dev/sdc
+  ignore_errors: yes
 
-# - name: lvextend -l +100%FREE /dev/rootvg/rootlv
-#   command: lvextend -l +100%FREE /dev/rootvg/rootlv
-#   ignore_errors: yes
+- name: lvextend -l +100%FREE /dev/rootvg/rootlv
+  command: lvextend -l +100%FREE /dev/rootvg/rootlv
+  ignore_errors: yes
 
-# - name: resize2fs /dev/rootvg/rootlv
-#   command: resize2fs /dev/rootvg/rootlv
-#   ignore_errors: yes
+- name: resize2fs /dev/rootvg/rootlv
+  command: resize2fs /dev/rootvg/rootlv
+  ignore_errors: yes
 
-# #Creating folders & files
-# - name: Make temporary blobfuse folder to store files
-#   file:
-#     path: /mnt/resource/blobfusetmp
-#     state: directory
-#     mode: '0777'
-#     owner: root
-#     group: root
+#Creating folders & files
+- name: Make temporary blobfuse folder to store files
+  file:
+    path: /mnt/resource/blobfusetmp
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
 
-# - name: Create fuse_connection.cfg file in /blobfusetmp
-#   file:
-#     path: /mnt/resource/blobfusetmp/fuse_connection.cfg
-#     state: touch
-#     mode: '600'
-#     owner: root
-#     group: root
+- name: Create fuse_connection.cfg file in /blobfusetmp
+  file:
+    path: /mnt/resource/blobfusetmp/fuse_connection.cfg
+    state: touch
+    mode: '600'
+    owner: root
+    group: root
 
-# - name: Write to fuse_connection.cfg
-#   copy:
-#     dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
-#     content: |
-#       accountName {{ account_name }}
-#       accountKey {{ account_key }}
-#       containerName {{ container_name }}
+- name: Write to fuse_connection.cfg
+  copy:
+    dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
+    content: |
+      accountName {{ account_name }}
+      accountKey {{ account_key }}
+      containerName {{ container_name }}
 
-# - name: Create ~/mycontainer to store files from Azure
-#   file:
-#     path: ~/mycontainer
-#     state: directory
-#     mode: '0755'
-#     owner: root
-#     group: root
+- name: Create ~/mycontainer to store files from Azure
+  file:
+    path: ~/mycontainer
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
 
-# #Connecting to azure
-# - name: Connect with Azure container
-#   command: blobfuse ~/mycontainer --tmp-path=/mnt/resource/blobfusetmp --config-file=/mnt/resource/blobfusetmp/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
-#   ignore_errors: yes
+#Connecting to azure
+- name: Connect with Azure container
+  command: blobfuse ~/mycontainer --tmp-path=/mnt/resource/blobfusetmp --config-file=/mnt/resource/blobfusetmp/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
+  ignore_errors: yes
 
-# #Copy .bin file from shared folder to server
-# - name: Copy HXEDownloadManager_Linux.bin to ~ Directory
-#   command: cp ~/mycontainer/HXEDownloadManager_linux.bin ~
+#Copy .bin file from shared folder to server
+- name: Copy HXEDownloadManager_Linux.bin to ~ Directory
+  command: cp ~/mycontainer/HXEDownloadManager_linux.bin ~
 
-# #Create downloads folder
-# - name: Create ~/Downloads directory
-#   file:
-#     path: ~/Downloads
-#     state: directory
-#     mode: '0777'
-#     owner: root
-#     group: root
+#Create downloads folder
+- name: Create ~/Downloads directory
+  file:
+    path: ~/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
 
-# #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
-# - name: List contents of ~/Downloads
-#   command: ls ~/Downloads
-#   register: contents
+#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
+- name: List contents of ~/Downloads
+  command: ls ~/Downloads
+  register: contents
 
-# - name: Download hxe.tgz and hxexsa.tgz
-#   command: ~/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz hxexsa.tgz
-#   when: contents.stdout == ""
+- name: Download hxe.tgz and hxexsa.tgz
+  command: ~/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz hxexsa.tgz
+  when: contents.stdout == ""
 
-# #Unarchive .tars
-# - name: Make /HANA folder in root
-#   file:
-#     path: /HANA
-#     state: directory
-#     mode: '0777'
-#     owner: root
-#     group: root
+#Unarchive .tars
+- name: Make /HANA folder in root
+  file:
+    path: /HANA
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
 
-# - name: Extract hxe.tgz
-#   unarchive:
-#     src: ~/Downloads/hxe.tgz
-#     dest: /HANA
+- name: Extract hxe.tgz
+  unarchive:
+    src: ~/Downloads/hxe.tgz
+    dest: /HANA
 
 # - name: Extract hxexsa.tgz
 #   unarchive:
 #     src: ~/Downloads/hxexsa.tgz
 #     dest: /HANA
 
-
-#Run setup script
-- name: Run setup_hxe.sh script
-  expect: 
-    command: sh /HANA/setup_hxe.sh
-    responses:
-      'Would you like to install these packages \(Y/N\):' : 'Y'
-      'HANA, express edition installer root directory \[/HANA/HANA_EXPRESS_20\]:' : "\n"
-      'Enter SAP HANA system ID \[HXE\]:' : 'A10'
-      'Enter instance number \[90\]:' : '14'
-      'Component \[all\]:' : "\n"
-      'Enter local host name \[(.*?)\]:' : "\n"
-      'Enter HDB master password:' : 'Admin2020'
-      'Confirm "HDB master" password:' : 'Admin2020'
-      'Do you need to use proxy server to access the internet\? \[N\] :' : "\n"
-      'Proceed with installation\? \(Y/N\) :' : 'Y'
-#      'Do you want to install XSA\? \(Y/N\):': 'Y'
-    echo: yes
-    timeout: null
-    register: script
-- debug: var=script.stdout_lines
+- name: Copy configuration an and password file into HDBLCM and run in batch mode
+  command: cat /tmp/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/tmp/install.rsp -b
+  ignore_errors: yes
+  register: config
+- debug: var=config.stdout_lines
