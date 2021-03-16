@@ -19,7 +19,7 @@ provider "azurerm" {
 //Create virtual network
 ///The following section creates a resource group named Flexso-Stage-TestEnv in the francecentral location:
 resource "azurerm_resource_group" "saptestautodeploygroup" {
-  name = "Flexso-Stage-TestEnv-Denys2"
+  name = "Flexso-Stage-TestEnv-Denys"
   location = "francecentral"
 }
 
@@ -55,6 +55,11 @@ resource "azurerm_public_ip" "myterraformpublicip" {
     tags = {
         environment = "Terraform SAP Automation Demo"
     }
+}
+
+resource "local_file" "PublicIP" {
+    content     = azurerm_public_ip.myterraformpublicip.ip_address
+    filename = "C:/ssh_keys/publicIP.txt"
 }
 
 //Create Network Security Group
@@ -150,8 +155,12 @@ resource "tls_private_key" "example_ssh" {
   rsa_bits = 4096
 }
 
-output "tls_private_key" { value = tls_private_key.example_ssh.private_key_pem }
+//output "tls_private_key" { value = tls_private_key.example_ssh.private_key_pem }
 
+resource "local_file" "sshkey" {
+    content     = tls_private_key.example_ssh.private_key_pem
+    filename = "C:/ssh_keys/sshkey.pem"
+}
 
 ///Collect public IP once VM has booted
 # data "azurerm_public_ip" "publicip" {
@@ -215,6 +224,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "example" {
   lun                = "10"
   caching            = "ReadWrite"
 }
+
 
 resource "null_resource" "provision_vm" {
     ///Make SSH connection
