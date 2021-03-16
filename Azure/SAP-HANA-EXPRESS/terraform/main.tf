@@ -290,9 +290,27 @@ resource "null_resource" "provision_vm" {
             "sudo yum install -y ansible",
             "echo yum install git", 
             "sudo yum -y install git", 
+            "echo install FTP",
+            "sudo yum install -y ftp",
             "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git", 
-            "sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
+            //"sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
         ]  
         on_failure = continue
     }
 }
+
+
+//In de pipeline, zijn de gegevens van de login 
+//Moet in ansbile toegevoegd worden
+/*
+yum install -y ftp
+sftp flexsostageadmin@51.103.26.163
+cd ftp
+lcd /home/azureuser/Downloads
+get HXEDownloadManager_linux.bin
+
+
+
+Username: 	flexsostageadmin
+Pass:		Flexsostageadmin2020
+*/
