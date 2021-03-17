@@ -76,7 +76,7 @@
 
 - name: expect example
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/ftp/HXEDownloadManager_linux.bin /home/azureuser/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:./home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin /home/azureuser/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
