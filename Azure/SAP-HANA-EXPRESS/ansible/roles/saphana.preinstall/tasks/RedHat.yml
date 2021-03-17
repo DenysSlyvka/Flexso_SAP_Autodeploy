@@ -58,6 +58,16 @@
       (.*)connecting(.*): "yes"
 
 
+#Unarchive .tars
+- name: Make /HANA folder in root
+  file:
+    path: ~/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+
 #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
 - name: List contents of /home/azureuser/Downloads
   command: ls ~/Downloads
