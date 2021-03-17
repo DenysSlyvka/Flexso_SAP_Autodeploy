@@ -36,14 +36,6 @@
     owner: root
     group: root
 
-#Connect to FTP server
-- name: FTP Download HXE Downloadmanager
-  get_url: 
-    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/HXEDownloadManager_linux.bin
-    dest: ~/Downloads
-  register: get_url_result
-- debug: var=get_url_result.stdout_lines
-
 - name: Download Bin file
   expect:
     command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin /home/azureuser/Downloads
