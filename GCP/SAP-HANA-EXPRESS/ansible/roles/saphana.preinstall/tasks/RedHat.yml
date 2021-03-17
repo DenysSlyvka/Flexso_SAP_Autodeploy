@@ -36,6 +36,13 @@
     owner: root
     group: root
 
+- name: Create home/werner_deschryver/Downloads directory
+  file:
+    path: /home/werner_deschryver/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
 #Connect to FTP server
 # - name: FTP Download HXE Downloadmanager
 #   get_url: 
@@ -46,21 +53,21 @@
 
 - name: Download Bin file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin ~/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin /home/werner_deschryver/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download Config file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp ~/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp /home/werner_deschryver/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download passwords file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml ~/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml /home/werner_deschryver/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
@@ -71,14 +78,14 @@
 #   command: ls /home/werner_deschryver/Downloads
 #   register: contents
 
-- name: Change permissions inside ~/Downloads
+- name: Change permissions inside /home/werner_deschryver/Downloads
   file:
-    path: ~/Downloads
+    path: /home/werner_deschryver/Downloads
     mode: '0777'
     recurse: yes
 
 - name: Download hxe.tgz
-  command: ~/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
+  command: /home/werner_deschryver/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
   # when: contents.stdout == ""
 
 #Unarchive .tars
@@ -96,7 +103,7 @@
     dest: /HANA
 
 - name: Copy configuration an and password file into HDBLCM and run in batch mode
-  shell: cat ~/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=~/Downloads/install.rsp -b
+  shell: cat /home/werner_deschryver/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/home/werner_deschryver/Downloads/install.rsp -b
   ignore_errors: yes
   register: config
 - debug: var=config.stdout_lines
