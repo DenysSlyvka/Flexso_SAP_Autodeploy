@@ -1,5 +1,7 @@
 ---
 #Installs
+- become: true
+
 - name: Installing Compat-SAP-C++
   package:
     name: "{{ compat_packages }}"
@@ -35,6 +37,7 @@
     mode: '0777'
     owner: root
     group: root
+  become: yes
 
 - name: Download Bin file
   expect:
@@ -42,6 +45,7 @@
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
+    become: yes
 
 - name: Download Config file
   expect:
@@ -49,6 +53,7 @@
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
+    become: yes
 
 - name: Download passwords file
   expect:
@@ -56,6 +61,7 @@
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
+    become: yes
 
 
 #Unarchive .tars
@@ -85,6 +91,7 @@
     mode: '0777'
     owner: root
     group: root
+  become: yes
 
 - name: Extract hxe.tgz
   unarchive:
