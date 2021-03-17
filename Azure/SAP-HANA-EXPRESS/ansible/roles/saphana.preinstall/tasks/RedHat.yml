@@ -9,11 +9,6 @@
   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
   ignore_errors: yes
 
-- name: Installing blobfuse
-  yum:
-    name: blobfuse
-    state: installed
-
 - name: Installing java
   yum:
     name: java
