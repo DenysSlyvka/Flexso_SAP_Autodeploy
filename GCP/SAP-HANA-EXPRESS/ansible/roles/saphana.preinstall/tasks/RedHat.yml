@@ -30,12 +30,19 @@
 #Create downloads folder
 - name: Create ~/Downloads directory
   file:
-    path: /home/werner_deschryver/Downloads
+    path: ~/Downloads
     state: directory
     mode: '0777'
     owner: root
     group: root
 
+- name: Create home/werner_deschryver/Downloads directory
+  file:
+    path: /home/werner_deschryver/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
 #Connect to FTP server
 # - name: FTP Download HXE Downloadmanager
 #   get_url: 
@@ -71,8 +78,14 @@
 #   command: ls /home/werner_deschryver/Downloads
 #   register: contents
 
-- name: Download hxe.tgz and hxexsa.tgz
-  command: /home/werner_deschryver/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz hxexsa.tgz
+- name: Change permissions inside /home/werner_deschryver/Downloads
+  file:
+    path: /home/werner_deschryver/Downloads
+    mode: '0777'
+    recurse: yes
+
+- name: Download hxe.tgz
+  command: /home/werner_deschryver/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
   # when: contents.stdout == ""
 
 #Unarchive .tars
@@ -86,7 +99,7 @@
 
 - name: Extract hxe.tgz
   unarchive:
-    src: /home/werner_deschryver/Downloads/hxe.tgz
+    src: ~/Downloads/hxe.tgz
     dest: /HANA
 
 - name: Copy configuration an and password file into HDBLCM and run in batch mode
