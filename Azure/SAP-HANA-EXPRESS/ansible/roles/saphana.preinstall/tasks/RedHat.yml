@@ -74,9 +74,23 @@
 #   register: get_url_result
 # - debug: var=get_url_result.stdout_lines
 
-- name: expect example
+- name: Download Bin file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:./home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin /home/azureuser/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin /home/azureuser/Downloads
+    responses:
+      (.*)password(.*): "Flexsostageadmin2020"
+      (.*)connecting(.*): "yes"
+
+- name: Download Config file
+  expect:
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp /home/azureuser/Downloads
+    responses:
+      (.*)password(.*): "Flexsostageadmin2020"
+      (.*)connecting(.*): "yes"
+
+- name: Download passwords file
+  expect:
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml /home/azureuser/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
