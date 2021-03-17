@@ -15,7 +15,7 @@ data "google_compute_image" "rhel_image" {
 }
 
 resource "google_compute_instance" "vm_instance" {
-  name         = "terraform-test-werner"
+  name         = "myvm"
   machine_type = "e2-medium"
 
   tags = ["terraform"]
