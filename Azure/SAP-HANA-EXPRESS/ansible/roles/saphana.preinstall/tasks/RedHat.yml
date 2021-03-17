@@ -33,46 +33,29 @@
   ignore_errors: yes
 
 #Creating folders & files
-- name: Make temporary blobfuse folder to store files
-  file:
-    path: /mnt/resource/blobfusetmp
-    state: directory
-    mode: '0777'
-    owner: root
-    group: root
+# - name: Make temporary blobfuse folder to store files
+#   file:
+#     path: /mnt/resource/blobfusetmp
+#     state: directory
+#     mode: '0777'
+#     owner: root
+#     group: root
 
-- name: Create fuse_connection.cfg file in /blobfusetmp
-  file:
-    path: /mnt/resource/blobfusetmp/fuse_connection.cfg
-    state: touch
-    mode: '600'
-    owner: root
-    group: root
+# - name: Create fuse_connection.cfg file in /blobfusetmp
+#   file:
+#     path: /mnt/resource/blobfusetmp/fuse_connection.cfg
+#     state: touch
+#     mode: '600'
+#     owner: root
+#     group: root
 
-- name: Write to fuse_connection.cfg
-  copy:
-    dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
-    content: |
-      accountName {{ account_name }}
-      accountKey {{ account_key }}
-      containerName {{ container_name }}
-
-- name: Create ~/mycontainer to store files from Azure
-  file:
-    path: ~/mycontainer
-    state: directory
-    mode: '0755'
-    owner: root
-    group: root
-
-#Connecting to azure
-- name: Connect with Azure container
-  command: blobfuse ~/mycontainer --tmp-path=/mnt/resource/blobfusetmp --config-file=/mnt/resource/blobfusetmp/fuse_connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120
-  ignore_errors: yes
-
-#Copy .bin file from shared folder to server
-- name: Copy HXEDownloadManager_Linux.bin to ~ Directory
-  command: cp ~/mycontainer/HXEDownloadManager_linux.bin ~
+# - name: Write to fuse_connection.cfg
+#   copy:
+#     dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
+#     content: |
+#       accountName {{ account_name }}
+#       accountKey {{ account_key }}
+#       containerName {{ container_name }}
 
 #Create downloads folder
 - name: Create ~/Downloads directory
@@ -82,6 +65,28 @@
     mode: '0777'
     owner: root
     group: root
+
+#Connect to FTP server
+- name: FTP Download HXE Downloadmanager
+  get_url: 
+    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/HXEDownloadManager_linux.bin
+    dest: ~/Downloads
+  register: get_url_result
+- debug: var=get_url_result.stdout_lines
+
+- name: FTP Download config file
+  get_url: 
+    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/install.rsp
+    dest: ~/Downloads
+  register: get_url_result
+- debug: var=get_url_result.stdout_lines
+
+- name: FTP Download HXE password file
+  get_url: 
+    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/install.rsp.xml
+    dest: ~/Downloads
+  register: get_url_result
+- debug: var=get_url_result.stdout_lines
 
 #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
 - name: List contents of ~/Downloads
@@ -108,7 +113,7 @@
 
 
 - name: Copy configuration an and password file into HDBLCM and run in batch mode
-  shell: cat /tmp/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/tmp/install.rsp -b
+  shell: cat ~/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=~/Downloads/install.rsp -b
   ignore_errors: yes
   register: config
 - debug: var=config.stdout_lines
