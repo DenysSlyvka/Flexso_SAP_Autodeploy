@@ -35,7 +35,7 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 
-  metadata_startup_script = "sudo yum install git -y && sudo yum install ansible -y && sudo yum install -y ftp && sudo yum install -y expect && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git"
+  metadata_startup_script = "sudo yum install git -y && sudo yum install ansible -y && sudo yum install -y ftp && ### && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git"
 }
 
 # resource "null_resource" "provision_vm" {
