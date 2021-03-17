@@ -9,11 +9,6 @@
   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
   ignore_errors: yes
 
-- name: Installing blobfuse
-  yum:
-    name: blobfuse
-    state: installed
-
 - name: Installing java
   yum:
     name: java
@@ -40,14 +35,6 @@
     mode: '0777'
     owner: root
     group: root
-
-#Connect to FTP server
-- name: FTP Download HXE Downloadmanager
-  get_url: 
-    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/HXEDownloadManager_linux.bin
-    dest: ~/Downloads
-  register: get_url_result
-- debug: var=get_url_result.stdout_lines
 
 - name: Download Bin file
   expect:
