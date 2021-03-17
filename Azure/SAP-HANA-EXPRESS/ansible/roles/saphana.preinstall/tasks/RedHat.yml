@@ -1,119 +1,112 @@
----
-#Installs
-- name: Installing Compat-SAP-C++
-  package:
-    name: "{{ compat_packages }}"
-    state: installed
+# ---
+# #Installs
+# - name: Installing Compat-SAP-C++
+#   package:
+#     name: "{{ compat_packages }}"
+#     state: installed
 
-- name: Installing linux package repository for microsoft products
-  command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
-  ignore_errors: yes
+# - name: Installing linux package repository for microsoft products
+#   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
+#   ignore_errors: yes
 
-- name: Installing blobfuse
-  yum:
-    name: blobfuse
-    state: installed
+# - name: Installing blobfuse
+#   yum:
+#     name: blobfuse
+#     state: installed
 
-- name: Installing java
-  yum:
-    name: java
-    state: installed
+# - name: Installing java
+#   yum:
+#     name: java
+#     state: installed
 
-#Disks
-- name: vgextend /dev/rootvg /dev/sdc
-  command: vgextend /dev/rootvg /dev/sdc
-  ignore_errors: yes
+# #Disks
+# - name: vgextend /dev/rootvg /dev/sdc
+#   command: vgextend /dev/rootvg /dev/sdc
+#   ignore_errors: yes
 
-- name: lvextend -l +100%FREE /dev/rootvg/rootlv
-  command: lvextend -l +100%FREE /dev/rootvg/rootlv
-  ignore_errors: yes
+# - name: lvextend -l +100%FREE /dev/rootvg/rootlv
+#   command: lvextend -l +100%FREE /dev/rootvg/rootlv
+#   ignore_errors: yes
 
-- name: resize2fs /dev/rootvg/rootlv
-  command: resize2fs /dev/rootvg/rootlv
-  ignore_errors: yes
+# - name: resize2fs /dev/rootvg/rootlv
+#   command: resize2fs /dev/rootvg/rootlv
+#   ignore_errors: yes
 
-#Creating folders & files
-# - name: Make temporary blobfuse folder to store files
+# #Creating folders & files
+# # - name: Make temporary blobfuse folder to store files
+# #   file:
+# #     path: /mnt/resource/blobfusetmp
+# #     state: directory
+# #     mode: '0777'
+# #     owner: root
+# #     group: root
+
+# # - name: Create fuse_connection.cfg file in /blobfusetmp
+# #   file:
+# #     path: /mnt/resource/blobfusetmp/fuse_connection.cfg
+# #     state: touch
+# #     mode: '600'
+# #     owner: root
+# #     group: root
+
+# # - name: Write to fuse_connection.cfg
+# #   copy:
+# #     dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
+# #     content: |
+# #       accountName {{ account_name }}
+# #       accountKey {{ account_key }}
+# #       containerName {{ container_name }}
+
+# #Create downloads folder
+# - name: Create ~/Downloads directory
 #   file:
-#     path: /mnt/resource/blobfusetmp
+#     path: ~/Downloads
 #     state: directory
 #     mode: '0777'
 #     owner: root
 #     group: root
 
-# - name: Create fuse_connection.cfg file in /blobfusetmp
+# #Connect to FTP server
+# - name: FTP Download HXE Downloadmanager
+#   get_url: 
+#     url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/HXEDownloadManager_linux.bin
+#     dest: ~/Downloads
+#   register: get_url_result
+# - debug: var=get_url_result.stdout_lines
+
+- name: expect example
+  expect:
+    echo: yes
+    command: sftp flexsostageadmin@51.103.26.163:/ftp/HXEDownloadManager_linux.bin /home/azureuser/Downloads
+    responses:
+      (.*)flexsostageadmin@51.103.26.163's password(.*): "Flexsostageadmin2020"
+    register: expect_example_result
+
+# #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
+# - name: List contents of ~/Downloads
+#   command: ls ~/Downloads
+#   register: contents
+
+# - name: Download hxe.tgz and hxexsa.tgz
+#   command: ~/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz hxexsa.tgz
+#   when: contents.stdout == ""
+
+# #Unarchive .tars
+# - name: Make /HANA folder in root
 #   file:
-#     path: /mnt/resource/blobfusetmp/fuse_connection.cfg
-#     state: touch
-#     mode: '600'
+#     path: /HANA
+#     state: directory
+#     mode: '0777'
 #     owner: root
 #     group: root
 
-# - name: Write to fuse_connection.cfg
-#   copy:
-#     dest: /mnt/resource/blobfusetmp/fuse_connection.cfg
-#     content: |
-#       accountName {{ account_name }}
-#       accountKey {{ account_key }}
-#       containerName {{ container_name }}
+# - name: Extract hxe.tgz
+#   unarchive:
+#     src: ~/Downloads/hxe.tgz
+#     dest: /HANA
 
-#Create downloads folder
-- name: Create ~/Downloads directory
-  file:
-    path: ~/Downloads
-    state: directory
-    mode: '0777'
-    owner: root
-    group: root
-
-#Connect to FTP server
-- name: FTP Download HXE Downloadmanager
-  get_url: 
-    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/HXEDownloadManager_linux.bin
-    dest: ~/Downloads
-  register: get_url_result
-- debug: var=get_url_result.stdout_lines
-
-- name: FTP Download config file
-  get_url: 
-    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/install.rsp
-    dest: ~/Downloads
-  register: get_url_result
-- debug: var=get_url_result.stdout_lines
-
-- name: FTP Download HXE password file
-  get_url: 
-    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/install.rsp.xml
-    dest: ~/Downloads
-  register: get_url_result
-- debug: var=get_url_result.stdout_lines
-
-#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
-- name: List contents of ~/Downloads
-  command: ls ~/Downloads
-  register: contents
-
-- name: Download hxe.tgz and hxexsa.tgz
-  command: ~/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz hxexsa.tgz
-  when: contents.stdout == ""
-
-#Unarchive .tars
-- name: Make /HANA folder in root
-  file:
-    path: /HANA
-    state: directory
-    mode: '0777'
-    owner: root
-    group: root
-
-- name: Extract hxe.tgz
-  unarchive:
-    src: ~/Downloads/hxe.tgz
-    dest: /HANA
-
-
-- name: Copy configuration an and password file into HDBLCM and run in batch mode
-  shell: cat ~/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=~/Downloads/install.rsp -b
-  ignore_errors: yes
-  register: config
-- debug: var=config.stdout_lines
+# - name: Copy configuration an and password file into HDBLCM and run in batch mode
+#   shell: cat ~/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=~/Downloads/install.rsp -b
+#   ignore_errors: yes
+#   register: config
+# - debug: var=config.stdout_lines
