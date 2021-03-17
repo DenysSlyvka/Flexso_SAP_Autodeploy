@@ -76,11 +76,11 @@
 
 - name: expect example
   expect:
-    echo: yes
     command: sftp flexsostageadmin@51.103.26.163:/ftp/HXEDownloadManager_linux.bin /home/azureuser/Downloads
     responses:
-      (.*)flexsostageadmin@51.103.26.163's password(.*): "Flexsostageadmin2020"
-    register: expect_example_result
+      (.*)password(.*): "Flexsostageadmin2020"
+      (.*)connecting(.*): "yes"
+
 
 # #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
 # - name: List contents of ~/Downloads
