@@ -5,9 +5,9 @@
     name: "{{ compat_packages }}"
     state: installed
 
-- name: Installing linux package repository for microsoft products
-  command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
-  ignore_errors: yes
+# - name: Installing linux package repository for microsoft products
+#   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
+#   ignore_errors: yes
 
 - name: Installing java
   yum:
@@ -15,17 +15,17 @@
     state: installed
 
 #Disks
-- name: vgextend /dev/rootvg /dev/sdc
-  command: vgextend /dev/rootvg /dev/sdc
-  ignore_errors: yes
+# - name: vgextend /dev/rootvg /dev/sdc
+#   command: vgextend /dev/rootvg /dev/sdc
+#   ignore_errors: yes
 
-- name: lvextend -l +100%FREE /dev/rootvg/rootlv
-  command: lvextend -l +100%FREE /dev/rootvg/rootlv
-  ignore_errors: yes
+# - name: lvextend -l +100%FREE /dev/rootvg/rootlv
+#   command: lvextend -l +100%FREE /dev/rootvg/rootlv
+#   ignore_errors: yes
 
-- name: resize2fs /dev/rootvg/rootlv
-  command: resize2fs /dev/rootvg/rootlv
-  ignore_errors: yes
+# - name: resize2fs /dev/rootvg/rootlv
+#   command: resize2fs /dev/rootvg/rootlv
+#   ignore_errors: yes
 
 #Create downloads folder
 - name: Create ~/Downloads directory
@@ -37,12 +37,12 @@
     group: root
 
 #Connect to FTP server
-- name: FTP Download HXE Downloadmanager
-  get_url: 
-    url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/HXEDownloadManager_linux.bin
-    dest: /home/werner_deschryver/Downloads
-  register: get_url_result
-- debug: var=get_url_result.stdout_lines
+# - name: FTP Download HXE Downloadmanager
+#   get_url: 
+#     url: sftp://flexsostageadmin:Flexsostageadmin2020@51.103.26.163/ftp/HXEDownloadManager_linux.bin
+#     dest: /home/werner_deschryver/Downloads
+#   register: get_url_result
+# - debug: var=get_url_result.stdout_lines
 
 - name: Download Bin file
   expect:
