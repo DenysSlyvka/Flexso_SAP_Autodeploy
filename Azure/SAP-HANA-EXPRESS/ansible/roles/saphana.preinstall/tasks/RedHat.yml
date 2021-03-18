@@ -35,31 +35,28 @@
     mode: '0777'
     owner: root
     group: root
-  become: yes
 
 - name: Download Bin file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin ~/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin /root/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
-    become: yes
 
 - name: Download Config file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp ~/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp /root/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
-    become: yes
 
 - name: Download passwords file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml ~/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml /root/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
-    become: yes
+
 
 
 #Unarchive .tars
@@ -89,7 +86,6 @@
     mode: '0777'
     owner: root
     group: root
-  become: yes
 
 - name: Extract hxe.tgz
   unarchive:
