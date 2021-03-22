@@ -71,6 +71,12 @@
 #   command: ls /home/werner_deschryver/Downloads
 #   register: contents
 
+- name: Change permissions inside /home/werner_deschryver/Downloads
+  file:
+    path: /home/werner_deschryver/Downloads
+    mode: '0777'
+    recurse: yes
+
 - name: Download hxe.tgz
   command: /home/azureuser/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
   #when: contents.stdout == ""
