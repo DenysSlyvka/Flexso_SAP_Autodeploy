@@ -16,15 +16,6 @@
     state: installed
   ignore_errors: yes
 
-  #Unarchive .tars
-- name: Make /Downloads folder in root
-  file:
-    path: ~/Downloads
-    state: directory
-    mode: '0777'
-    owner: root
-    group: root
-
 #Disks
 - name: vgextend /dev/rootvg /dev/sdc
   command: vgextend /dev/rootvg /dev/sdc
@@ -37,6 +28,20 @@
 - name: resize2fs /dev/rootvg/rootlv
   command: resize2fs /dev/rootvg/rootlv
   ignore_errors: yes
+
+  #Unarchive .tars
+- name: Make /Downloads folder in root
+  file:
+    path: ~/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
+- name: List contents of /home/azureuser/Downloads
+  command: ls ~/Downloads
+  register: contents
 
 - name: Download Bin file
   expect:
@@ -58,11 +63,6 @@
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
-
-#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
-- name: List contents of /home/azureuser/Downloads
-  command: ls ~/Downloads
-  register: contents
 
 - name: Download hxe.tgz and hxexsa.tgz
   command: ~/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
