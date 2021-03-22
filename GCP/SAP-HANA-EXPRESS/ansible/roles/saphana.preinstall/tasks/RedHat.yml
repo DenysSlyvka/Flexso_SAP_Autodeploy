@@ -10,19 +10,6 @@
     name: java
     state: installed
 
-#Disks
-# - name: vgextend /dev/rootvg /dev/sdc
-#   command: vgextend /dev/rootvg /dev/sdc
-#   ignore_errors: yes
-
-# - name: lvextend -l +100%FREE /dev/rootvg/rootlv
-#   command: lvextend -l +100%FREE /dev/rootvg/rootlv
-#   ignore_errors: yes
-
-# - name: resize2fs /dev/rootvg/rootlv
-#   command: resize2fs /dev/rootvg/rootlv
-#   ignore_errors: yes
-
 #Create downloads folder
 - name: Create ~/Downloads directory
   file:
@@ -90,7 +77,7 @@
     src: ~/Downloads/hxe.tgz
     dest: /HANA
 
-- name: Copy configuration an and password file into HDBLCM and run in batch mode
+- name: Copy configuration and password file into HDBLCM and run in batch mode
   shell: cat /home/werner_deschryver/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/home/werner_deschryver/Downloads/install.rsp -b
   ignore_errors: yes
   register: config
