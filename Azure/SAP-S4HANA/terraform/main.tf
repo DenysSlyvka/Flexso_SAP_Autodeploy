@@ -17,17 +17,17 @@ provider "azurerm" {
 }
 
 //Create virtual network
-///The following section creates a resource group named Flexso-Stage-TestEnv in the francecentral location:
+///The following section creates a resource group named Flexso-Stage-TestEnv in the westeurope location:
 resource "azurerm_resource_group" "saptestautodeploygroup" {
   name = "Flexso-Stage-TestEnv-Denys"
-  location = "francecentral"
+  location = "westeurope"
 }
 
 ///The following section creates a virtual network named myVnet in the 10.0.0.0/16 address space:
 resource "azurerm_virtual_network" "myterraformnetworktest" {
     name                = "myVnet-testDisks"
     address_space       = ["10.0.0.0/16"]
-    location            = "francecentral"
+    location            = "westeurope"
     resource_group_name = azurerm_resource_group.saptestautodeploygroup.name
 
     tags = {
@@ -48,7 +48,7 @@ resource "azurerm_subnet" "myterraformsubnet" {
 ///The following section creates a public IP address named myPublicIP:
 resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
-    location                     = "francecentral"
+    location                     = "westeurope"
     resource_group_name          = azurerm_resource_group.saptestautodeploygroup.name
     allocation_method            = "Static"
 
@@ -68,7 +68,7 @@ resource "local_file" "PublicIP" {
 //defines a rule to allow SSH traffic on TCP port 22:
 resource "azurerm_network_security_group" "myterraformnsg" {
     name                = "myNetworkSecurityGroup"
-    location            = "francecentral"
+    location            = "westeurope"
     resource_group_name = azurerm_resource_group.saptestautodeploygroup.name
 
     security_rule {
@@ -95,7 +95,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 ///to the virtual networking resources you've created:
 resource "azurerm_network_interface" "myterraformnic" {
     name                        = "myNIC"
-    location                    = "francecentral"
+    location                    = "westeurope"
     resource_group_name         = azurerm_resource_group.saptestautodeploygroup.name
 
     ip_configuration {
@@ -134,7 +134,7 @@ resource "random_id" "randomId" {
 resource "azurerm_storage_account" "mystorageaccount" {
     name                        = "diag${random_id.randomId.hex}"
     resource_group_name         = azurerm_resource_group.saptestautodeploygroup.name
-    location                    = "francecentral"
+    location                    = "westeurope"
     account_replication_type    = "LRS"
     account_tier                = "Standard"
 
@@ -171,10 +171,10 @@ resource "local_file" "sshkey" {
 
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
     name                  = "myVM"
-    location              = "francecentral"
+    location              = "westeurope"
     resource_group_name   = azurerm_resource_group.saptestautodeploygroup.name
     network_interface_ids = [azurerm_network_interface.myterraformnic.id]
-    size                  = "Standard_D8s_v3"
+    size                  = "M32ts"
 
     os_disk {
         name              = "myOsDisk"
@@ -185,8 +185,8 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
     source_image_reference {
         publisher = "RedHat"
-        offer     = "RHEL-SAP-HANA"
-        sku       = "7.2"
+        offer     = "RHEL"
+        sku       = "RHEL-SAP-HA"
         version   = "latest"
     }
 
@@ -249,15 +249,6 @@ resource "null_resource" "provision_vm" {
         destination = "/var/tmp/centos1.repo"
     }
 
-    provisioner "file" {
-        source      = "install.rsp"
-        destination = "/tmp/install.rsp"
-    }
-
-    provisioner "file" {
-        source      = "install.rsp.xml"
-        destination = "/tmp/install.rsp.xml"
-    }
 
 
     provisioner "remote-exec" {
