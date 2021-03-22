@@ -16,7 +16,7 @@ data "google_compute_image" "rhel_image" {
 
 resource "google_compute_instance" "vm_instance" {
   name         = "myvm"
-  machine_type = "e2-medium"
+  machine_type = "e2-standard-8"
 
   tags = ["terraform"]
 
@@ -35,7 +35,7 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 
-  metadata_startup_script = "sudo yum install git -y && sudo yum install ansible -y && sudo yum install -y ftp && yum install wget -y && wget https://download.opensuse.org/repositories/home:uibmz:opsi:opsi40/RHEL_7/home:uibmz:opsi:opsi40.repo -P /etc/yum.repos.d/ && yum install python-pexpect -y && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git"
+  metadata_startup_script = "sudo yum install git -y && sudo yum install ansible -y && sudo yum install -y ftp && yum install wget -y && wget https://download.opensuse.org/repositories/home:uibmz:opsi:opsi40/RHEL_7/home:uibmz:opsi:opsi40.repo -P /etc/yum.repos.d/ && yum install python-pexpect -y && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git && ansible-playbook Flexso_SAP_Autodeploy/GCP/SAP-HANA-EXPRESS/ansible/site.yml"
 }
 
 # resource "null_resource" "provision_vm" {
