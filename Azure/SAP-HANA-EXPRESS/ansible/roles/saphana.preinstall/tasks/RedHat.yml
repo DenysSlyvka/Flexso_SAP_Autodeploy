@@ -71,9 +71,9 @@
 #   command: ls /home/werner_deschryver/Downloads
 #   register: contents
 
-- name: Download hxe.tgz and hxexsa.tgz
+- name: Download hxe.tgz
   command: /home/azureuser/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
-  when: contents.stdout == ""
+  #when: contents.stdout == ""
 
 #Unarchive .tars
 - name: Make /HANA folder in root
