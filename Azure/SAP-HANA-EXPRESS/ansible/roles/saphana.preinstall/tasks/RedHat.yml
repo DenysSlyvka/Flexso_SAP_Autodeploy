@@ -30,7 +30,7 @@
   ignore_errors: yes
 
 #Create downloads folder
-- name: Make /Downloads folder in root
+- name: Create /Downloads folder in root
   file:
     path: ~/Downloads
     state: directory
@@ -73,7 +73,7 @@
 
 - name: Change permissions inside /home/werner_deschryver/Downloads
   file:
-    path: /home/werner_deschryver/Downloads
+    path: /home/azureuser/Downloads
     mode: '0777'
     recurse: yes
 
