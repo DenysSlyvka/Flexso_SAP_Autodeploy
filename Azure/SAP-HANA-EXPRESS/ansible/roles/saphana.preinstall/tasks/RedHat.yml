@@ -16,6 +16,15 @@
     state: installed
   ignore_errors: yes
 
+  #Unarchive .tars
+- name: Make /Downloads folder in root
+  file:
+    path: ~/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
 #Disks
 - name: vgextend /dev/rootvg /dev/sdc
   command: vgextend /dev/rootvg /dev/sdc
@@ -31,34 +40,24 @@
 
 - name: Download Bin file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin ~
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin ~/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download Config file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp ~
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp ~/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download passwords file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml ~
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml ~/Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
-
-
-#Unarchive .tars
-- name: Make /Downloads folder in root
-  file:
-    path: ~/Downloads
-    state: directory
-    mode: '0777'
-    owner: root
-    group: root
 
 #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
 - name: List contents of /home/azureuser/Downloads
@@ -66,7 +65,7 @@
   register: contents
 
 - name: Download hxe.tgz and hxexsa.tgz
-  command: ~/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz ~/Downloads
+  command: ~/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
   when: contents.stdout == ""
 
 #Unarchive .tars
