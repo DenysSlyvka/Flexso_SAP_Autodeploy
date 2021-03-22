@@ -4,6 +4,7 @@
   package:
     name: "{{ compat_packages }}"
     state: installed
+  ignore_errors: yes
 
 - name: Installing linux package repository for microsoft products
   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
@@ -13,6 +14,7 @@
   yum:
     name: java
     state: installed
+  ignore_errors: yes
 
 #Disks
 - name: vgextend /dev/rootvg /dev/sdc
@@ -27,47 +29,36 @@
   command: resize2fs /dev/rootvg/rootlv
   ignore_errors: yes
 
-#Create downloads folder
-- name: Create ~/Downloads directory
-  file:
-    path: ~/Downloads
-    state: directory
-    mode: '0777'
-    owner: root
-    group: root
-
 - name: Download Bin file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin /root/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HXEDownloadManager_linux.bin ~
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download Config file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp /root/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp ~
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download passwords file
   expect:
-    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml /root/Downloads
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/install.rsp.xml ~
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 
-
 #Unarchive .tars
-- name: Make /HANA folder in root
+- name: Make /Downloads folder in root
   file:
     path: ~/Downloads
     state: directory
     mode: '0777'
     owner: root
     group: root
-
 
 #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
 - name: List contents of /home/azureuser/Downloads
@@ -91,7 +82,6 @@
   unarchive:
     src: ~/Downloads/hxe.tgz
     dest: /HANA
-  become: yes
 
 - name: Copy configuration an and password file into HDBLCM and run in batch mode
   shell: cat ~/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=~/Downloads/install.rsp -b
