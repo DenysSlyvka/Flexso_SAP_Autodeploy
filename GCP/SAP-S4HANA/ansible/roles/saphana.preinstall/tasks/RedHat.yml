@@ -1,0 +1,84 @@
+---
+#Installs
+- name: Installing Compat-SAP-C++
+  package:
+    name: "{{ compat_packages }}"
+    state: installed
+
+- name: Installing java
+  yum:
+    name: java
+    state: installed
+
+#Create downloads folder
+- name: Create ~/Downloads directory
+  file:
+    path: ~/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+- name: Create home/werner_deschryver/Downloads directory
+  file:
+    path: /home/werner_deschryver/Downloads
+    state: directory
+    mode: '0777'
+    owner: root
+
+- name: Download Bin file
+  expect:
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-EXPRESS/HXEDownloadManager_linux.bin /home/werner_deschryver/Downloads
+    responses:
+      (.*)password(.*): "Flexsostageadmin2020"
+      (.*)connecting(.*): "yes"
+
+- name: Download Config file
+  expect:
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-EXPRESS/install.rsp /home/werner_deschryver/Downloads
+    responses:
+      (.*)password(.*): "Flexsostageadmin2020"
+      (.*)connecting(.*): "yes"
+
+- name: Download passwords file
+  expect:
+    command: sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-EXPRESS/install.rsp.xml /home/werner_deschryver/Downloads
+    responses:
+      (.*)password(.*): "Flexsostageadmin2020"
+      (.*)connecting(.*): "yes"
+
+
+#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
+# - name: List contents of /home/werner_deschryver/Downloads
+#   command: ls /home/werner_deschryver/Downloads
+#   register: contents
+
+- name: Change permissions inside /home/werner_deschryver/Downloads
+  file:
+    path: /home/werner_deschryver/Downloads
+    mode: '0777'
+    recurse: yes
+
+- name: Download hxe.tgz
+  command: /home/werner_deschryver/Downloads/HXEDownloadManager_linux.bin --ph 10.0.2.4 --pp 8080 linuxx86_64 installer hxe.tgz
+  # when: contents.stdout == ""
+
+#Unarchive .tars
+- name: Make /HANA folder in root
+  file:
+    path: /HANA
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+- name: Extract hxe.tgz
+  unarchive:
+    src: ~/Downloads/hxe.tgz
+    dest: /HANA
+
+- name: Copy configuration and password file into HDBLCM and run in batch mode
+  shell: cat /home/werner_deschryver/Downloads/install.rsp | /HANA/HANA_EXPRESS_20/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/home/werner_deschryver/Downloads/install.rsp -b
+  ignore_errors: yes
+  register: config
+- debug: var=config.stdout_lines
