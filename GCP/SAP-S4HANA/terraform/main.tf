@@ -25,12 +25,11 @@ resource "google_compute_instance" "vm_instance" {
   }
 
   network_interface {
-    # A default network is created for all GCP projects
     network = "test-terraform"
     access_config {
         network_tier = "STANDARD"
     }
   }
 
-   metadata_startup_script = "sudo yum install git -y && sudo yum install -y ftp && sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && sudo yum install ansible -y && sudo yum install -y ftp://ftp.pbone.net/mirror/ftp.redhat.com/pub/redhat/rhel/rhel-8-beta/appstream/aarch64/Packages/python3-pexpect-4.3.1-3.el8.noarch.rpm && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git"
+   metadata_startup_script = "sudo yum install git -y && sudo yum install -y ftp && sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && sudo yum install ansible -y && sudo yum install -y ftp://ftp.pbone.net/mirror/ftp.redhat.com/pub/redhat/rhel/rhel-8-beta/appstream/aarch64/Packages/python3-pexpect-4.3.1-3.el8.noarch.rpm && sudo yum install rsync -y && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git"
 }
