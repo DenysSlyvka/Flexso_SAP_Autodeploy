@@ -1,0 +1,6 @@
+# main playbook
+---
+- hosts: localhost
+  become: true
+  roles:
+    - sap-preconfigure-master
