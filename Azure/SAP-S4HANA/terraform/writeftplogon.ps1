@@ -1,13 +1,3 @@
-﻿$selection = Read-Host "Please type Confirm"
-cd C:\Users\Dirk\Documents\GitHub\Flexso_SAP_Autodeploy\Azure\SAP-HANA-EXPRESS\terraform
-terraform init
-terraform plan -out sap-hana-express-terraformplan.tfplan
-terraform apply sap-hana-express-terraformplan.tfplan
-
-
-sshkey=C:/ssh_keys/sshkey.pem
-ipaddress=$(<C:/ssh_keys/publicIP.txt)
-ssh -i $sshkey azureuser@"$ipaddress"
 
 
 $sftpHost = "51.103.26.163"
@@ -29,3 +19,20 @@ $sftp.Put($file, "/home/flexsostageadmin/ftp/HANA-EXPRESS/SSHCONNECTION")
 #Close the SFTP connection
 
 $sftp.Close()
+
+
+
+# //In de pipeline, zijn de gegevens van de login 
+# //Moet in ansbile toegevoegd worden
+# /*
+# yum install -y ftp
+# sftp flexsostageadmin@51.103.26.163
+# cd ftp
+# lcd /home/azureuser/Downloads
+# get HXEDownloadManager_linux.bin
+
+
+
+# Username: 	flexsostageadmin
+# Pass:		Flexsostageadmin2020
+# */

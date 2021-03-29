@@ -2,18 +2,16 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = ">= 2.26"
+      version = ">= 2.46.0"
     }
   }
 }
 
 
 provider "azurerm" {
-    subscription_id = "03770d81-ed60-40f1-8f52-bcc2ad3841f4"
-    client_id       = "d68ba4cd-a861-407b-9769-5dc5c10d2170"
-    client_secret   = "BpmSrLSijYMdLDeo.-vTjPq_cUlU6aUBEg"
-    tenant_id       = "58f8e72b-7946-4e10-bdbb-cc6eb93e1c89"
     features {}
+    subscription_id = "1df74c6e-fbe8-41c1-a83b-0f12e2a89659"
+    tenant_id = "58f8e72b-7946-4e10-bdbb-cc6eb93e1c89"
 }
 
 //Create virtual network
@@ -174,7 +172,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     location              = "westeurope"
     resource_group_name   = azurerm_resource_group.saptestautodeploygroup.name
     network_interface_ids = [azurerm_network_interface.myterraformnic.id]
-    size                  = "M32ts"
+    size                  = "Standard_M32ts"
 
     os_disk {
         name              = "myOsDisk"
@@ -185,8 +183,8 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
     source_image_reference {
         publisher = "RedHat"
-        offer     = "RHEL"
-        sku       = "RHEL-SAP-HA"
+        offer     = "RHEL-SAP-HA"
+        sku       = "8.2"
         version   = "latest"
     }
 
