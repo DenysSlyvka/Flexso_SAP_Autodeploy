@@ -6,8 +6,8 @@ provider "google" {
 }
 
 data "google_compute_image" "rhel_image" {
-  family  = "rhel-8"
-  project = "rhel-cloud"
+  family  = "rhel-8-2-sap-ha"
+  project = "rhel-sap-cloud"
 }
 
 resource "google_compute_instance" "vm_instance" {
@@ -30,6 +30,6 @@ resource "google_compute_instance" "vm_instance" {
         network_tier = "STANDARD"
     }
   }
-
-   metadata_startup_script = "sudo yum install git -y && sudo yum install -y ftp && sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && sudo yum install ansible -y && sudo yum install -y ftp://ftp.pbone.net/mirror/ftp.redhat.com/pub/redhat/rhel/rhel-8-beta/appstream/aarch64/Packages/python3-pexpect-4.3.1-3.el8.noarch.rpm && sudo yum install rsync -y && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git"
+ # Password for rsync command? -> metadata_startup_script = "sudo yum install ftp -y && sudo yum install rsync -y && rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /home/werner_deschryver/Downloads/"
+ # metadata_startup_script = "sudo yum install git -y && sudo yum install -y ftp && sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && sudo yum install ansible -y && sudo yum install -y ftp://ftp.pbone.net/mirror/ftp.redhat.com/pub/redhat/rhel/rhel-8-beta/appstream/aarch64/Packages/python3-pexpect-4.3.1-3.el8.noarch.rpm && sudo yum install rsync -y && git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git"
 }
