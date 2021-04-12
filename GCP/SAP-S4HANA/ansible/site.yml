@@ -3,5 +3,4 @@
 - hosts: localhost
   become: true
   roles:
-   # - sap-preconfigure-master
     - saphana.preinstall
