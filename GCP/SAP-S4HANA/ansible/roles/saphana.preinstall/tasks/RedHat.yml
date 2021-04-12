@@ -1,45 +1,48 @@
 ---
-#Installs
-
-#Create downloads folder
-# - name: Create ~/Downloads directory
-#   file:
-#     path: ~/Downloads
-#     state: directory
-#     mode: '0777'
-#     owner: root
-#     group: root
-
-- name: Create home/werner_deschryver/Downloads directory
+# Create directories to download installation files into
+- name: Create /Downloads directory
   file:
-    path: /home/werner_deschryver/Downloads
+    path: /Downloads
     state: directory
     mode: '0777'
     owner: root
 
-- name: Create home/werner_deschryver/NetWeaver directory
+- name: /NetWeaver directory
   file:
-    path: /home/werner_deschryver/NetWeaver
+    path: /NetWeaver
     state: directory
     mode: '0777'
     owner: root
 
+# Downloads all the required files from FTP server
 - name: Download HANA files
   expect:
-    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /home/werner_deschryver/Downloads
+    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /Downloads
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download NetWeaver files
   expect:
-    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /home/werner_deschryver/NetWeaver/
+    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /NetWeaver
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
-# - name: Change permissions inside /home/werner_deschryver/Downloads
+# # Chmod permissions in /home directory so that 'hdblcm' can be executed
+# - name: Change permission in /home
 #   file:
-#     path: /home/werner_deschryver/Downloads
+#     path: /home
 #     mode: '0777'
-#     recurse: yes
+
+# Runs hdblcm in batchmode with configfile 'install.rsp'
+# install.rsp currently works using a master password
+- name: Installing SAP HANA Database
+  shell: /Downloads/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --configfile=/Downloads/51054623/install.rsp
+  ignore_errors: yes
+  register: config
+- debug: var=config.stdout_lines
+
+# #unzip 51050829_3.ZIP
+# #/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf SWPM10SP31_2-20009701.SAR -R /NetWeaver/SWPM
+# #SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/NetWeaver/parameters.params SAPINST_EXECUTE_PRODUCT_ID=NW_ABAP_OneHost:NW750.HDB.ABAP SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
