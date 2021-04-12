@@ -1,5 +1,0 @@
-# roles/ROLENAME/defaults/main.yml
----
-account_name: cs410037ffea167f1b9
-account_key: 14agV87ofCXELY7E74xJtnXJ0aGpjUXMoSUHUwZ2ecYYD1QGBRbmNUNauK1kM9KwZW1hhxyDf22VBdTN1DcNmA==
-container_name: test-sap-templates

@@ -1,6 +1,0 @@
-# main playbook
----
-- hosts: localhost
-  become: true
-  roles:
-    - saphana.preinstall
