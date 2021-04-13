@@ -38,42 +38,43 @@
 #     owner: root
 #     group: root
 
-# Create directories to download installation files into
-- name: Create /SAP directory
-  file:
-    path: /SAP
-    state: directory
-    mode: '0777'
-    owner: root
+# # Create directories to download installation files into
+# - name: Create /SAP directory
+#   file:
+#     path: /SAP
+#     state: directory
+#     mode: '0777'
+#     owner: root
 
-- name: Create /SAP/HDB directory
-  file:
-    path: /SAP/HDB
-    state: directory
-    mode: '0777'
-    owner: root
+# - name: Create /SAP/HDB directory
+#   file:
+#     path: /SAP/HDB
+#     state: directory
+#     mode: '0777'
+#     owner: root
 
-- name: Create /SAP/NetWeaver directory
-  file:
-    path: /SAP/NetWeaver
-    state: directory
-    mode: '0777'
-    owner: root
+# - name: Create /SAP/NetWeaver directory
+#   file:
+#     path: /SAP/NetWeaver
+#     state: directory
+#     mode: '0777'
+#     owner: root
 
-# Downloads all the required files from FTP server
-- name: Download HANA files
-  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
-  vars:
-    ansible_command_timeout: 1000
+# # Downloads all the required files from FTP server
+# - name: Download HANA files
+#   command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
+#   vars:
+#     ansible_command_timeout: 1000
 
 - name: Download NetWeaver files
   command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /SAP/NetWeaver
   vars:
-    ansible_command_timeout: 1000
+    async: 9999
+    poll: 5
 
 - name: Installing SAP HANA Database
   shell: /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --configfile=/SAP/HDB/51054623/install.rsp
-  ignore_errors: yes
+  ignore_errors: yesexit
   register: config
 - debug: var=config.stdout_lines
 
