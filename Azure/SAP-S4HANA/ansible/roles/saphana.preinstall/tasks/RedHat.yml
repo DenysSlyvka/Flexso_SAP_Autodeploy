@@ -62,8 +62,7 @@
 
 #Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
 - name: Add FTP host to /etc/hosts
-  command: echo "51.103.26.163 flexsostageadmin" >> /etc/hosts
-  register: contents
+  command: sudo echo "51.103.26.163 flexsostageadmin" >> /etc/hosts
 
 # Downloads all the required files from FTP server
 - name: Download HANA files
