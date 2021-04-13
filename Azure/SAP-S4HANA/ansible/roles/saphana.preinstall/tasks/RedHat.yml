@@ -1,20 +1,20 @@
 ---
 # #Installs
-- name: Installing Compat-SAP-C++
-  package:
-    name: "{{ compat_packages }}"
-    state: installed
-  ignore_errors: yes
+# - name: Installing Compat-SAP-C++
+#   package:
+#     name: "{{ compat_packages }}"
+#     state: installed
+#   ignore_errors: yes
 
-- name: Installing linux package repository for microsoft products
-  command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
-  ignore_errors: yes
+# - name: Installing linux package repository for microsoft products
+#   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
+#   ignore_errors: yes
 
-- name: Installing java
-  yum:
-    name: java
-    state: installed
-  ignore_errors: yes
+# - name: Installing java
+#   yum:
+#     name: java
+#     state: installed
+#   ignore_errors: yes
 
 #Disks
 # - name: vgextend /dev/rootvg /dev/sdc
@@ -60,18 +60,14 @@
     mode: '0777'
     owner: root
 
-#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
-- name: Add FTP host to /etc/hosts
-  command: echo "51.103.26.163 flexsostageadmin" >> /etc/hosts
-
 # Downloads all the required files from FTP server
 - name: Download HANA files
-  command: sshpass -p Flexsostageadmin2020 rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
+  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
   vars:
     ansible_command_timeout: 1000
 
 - name: Download NetWeaver files
-  command: sshpass -p 'Flexsostageadmin2020' rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /SAP/NetWeaver
+  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /SAP/NetWeaver
   vars:
     ansible_command_timeout: 1000
 
