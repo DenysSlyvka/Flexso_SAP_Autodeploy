@@ -1,15 +1,22 @@
 ---
 # Create directories to download installation files into
-- name: Create /Downloads directory
+- name: Create /SAP directory
   file:
-    path: /Downloads
+    path: /SAP
     state: directory
     mode: '0777'
     owner: root
 
-- name: /NetWeaver directory
+- name: Create /SAP/HDB directory
   file:
-    path: /NetWeaver
+    path: /SAP/HDB
+    state: directory
+    mode: '0777'
+    owner: root
+
+- name: Create /SAP/NetWeaver directory
+  file:
+    path: /SAP/NetWeaver
     state: directory
     mode: '0777'
     owner: root
@@ -17,14 +24,14 @@
 # Downloads all the required files from FTP server
 - name: Download HANA files
   expect:
-    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /Downloads
+    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
 - name: Download NetWeaver files
   expect:
-    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /NetWeaver
+    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /SAP/NetWeaver
     responses:
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
@@ -38,11 +45,19 @@
 # Runs hdblcm in batchmode with configfile 'install.rsp'
 # install.rsp currently works using a master password
 - name: Installing SAP HANA Database
-  shell: /Downloads/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --configfile=/Downloads/51054623/install.rsp
+  shell: /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --configfile=/SAP/HDB/51054623/install.rsp
   ignore_errors: yes
   register: config
 - debug: var=config.stdout_lines
 
-# #unzip 51050829_3.ZIP
-# #/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf SWPM10SP31_2-20009701.SAR -R /NetWeaver/SWPM
-# #SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/NetWeaver/parameters.params SAPINST_EXECUTE_PRODUCT_ID=NW_ABAP_OneHost:NW750.HDB.ABAP SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
+- name: Unzip '51050829_3.ZIP' inside /SAP/NetWeaver/NetWeaver
+  unarchive:
+    src: /SAP/NetWeaver/NetWeaver/51050829_3.ZIP
+    dest: /SAP/NetWeaver/NetWeaver
+
+- name: SAPCAR SWPM
+  shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
+
+#T #unzip 51050829_3.ZIP
+#T #/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf SWPM10SP31_2-20009701.SAR -R /NetWeaver/SWPM
+# #SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NetWeaver/NetWeaver/parameters-gcp.params SAPINST_EXECUTE_PRODUCT_ID=NW_ABAP_OneHost:NW750.HDB.ABAP SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
