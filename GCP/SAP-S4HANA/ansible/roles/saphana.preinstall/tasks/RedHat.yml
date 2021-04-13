@@ -23,19 +23,14 @@
 
 # Downloads all the required files from FTP server
 - name: Download HANA files
-  expect:
-    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
-    responses:
-      (.*)password(.*): "Flexsostageadmin2020"
-      (.*)connecting(.*): "yes"
+  command: sshpass -p 'Flexsostageadmin2020' rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
+  vars:
+    ansible_command_timeout: 1000
 
 - name: Download NetWeaver files
-  expect:
-    command: rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /SAP/NetWeaver
-    responses:
-      (.*)password(.*): "Flexsostageadmin2020"
-      (.*)connecting(.*): "yes"
-
+  command: sshpass -p 'Flexsostageadmin2020' rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /SAP/NetWeaver
+  vars:
+    ansible_command_timeout: 1000
 # # Chmod permissions in /home directory so that 'hdblcm' can be executed
 # - name: Change permission in /home
 #   file:
