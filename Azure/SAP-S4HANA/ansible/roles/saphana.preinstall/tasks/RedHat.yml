@@ -60,9 +60,14 @@
     mode: '0777'
     owner: root
 
+#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
+- name: Add FTP host to /etc/hosts
+  command: echo "51.103.26.163 flexsostageadmin" >> /etc/hosts
+  register: contents
+
 # Downloads all the required files from FTP server
 - name: Download HANA files
-  command: sshpass -p 'Flexsostageadmin2020' rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
+  command: sshpass -p Flexsostageadmin2020 rsync -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/51054623 /SAP/HDB
   vars:
     ansible_command_timeout: 1000
 
