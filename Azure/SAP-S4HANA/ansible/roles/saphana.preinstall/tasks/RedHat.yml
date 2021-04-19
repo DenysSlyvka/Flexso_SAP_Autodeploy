@@ -124,8 +124,13 @@
 #   register: unrar
 # - debug: var=unrar.stdout_lines 
 
-- name: SAPCAR SWPM
-  shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/NetWeaver/NetWeaver/SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
+# - name: SAPCAR SWPM
+#   shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/NetWeaver/NetWeaver/SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
+
+#Add sapinst group
+- name: Add group sapinst
+  command: groupadd sapinst
+  ignore_errors: yes
 
 #Netweaver will be installed here
 - name: Create /Netweaver directory
