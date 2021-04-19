@@ -97,20 +97,24 @@
 #Download UNRAR
 - name: Installing netweaver
   command: wget -P /tmp https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
+  register: unrar
 - debug: var=config.stdout_lines 
 
 #Extract unrar
 - name: Installing netweaver
   command: tar -zxvf /tmp/rarlinux-x64-5.6.0.tar.gz
+  register: unrar
 - debug: var=config.stdout_lines 
 
 #Unrar rars
 - name: Installing netweaver
   command: /usr/local/bin/rar/unrar x 51052160_part2.rar
+  register: unrar
 - debug: var=config.stdout_lines 
 
 - name: Installing netweaver
   command: /usr/local/bin/rar/unrar x 51052161_part2.rar
+  register: unrar
 - debug: var=config.stdout_lines 
 
 - name: SAPCAR SWPM
