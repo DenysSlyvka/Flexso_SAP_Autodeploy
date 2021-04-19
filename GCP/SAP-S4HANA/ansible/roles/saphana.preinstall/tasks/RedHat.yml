@@ -84,10 +84,16 @@
 - name: SAPCAR SWPM
   shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/NetWeaver/NetWeaver/SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
 
+# Add the usergroup sapinst so ownership of /Netweaver can be set to this group
+- name: Add user sapinst
+  command: groupadd sapisnt
+  ignore_errors: yes
+
 #Netweaver will be installed here
 - name: Create /Netweaver directory
   file:
     path: /Netweaver
+    state: directory
     group: sapinst
     owner: root
     mode: '0777'
@@ -96,7 +102,7 @@
 - name: Installing netweaver
   command: chdir=/Netweaver /SAP/NetWeaver/SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NetWeaver/NetWeaver/parameters-gcp.params SAPINST_EXECUTE_PRODUCT_ID=NW_ABAP_OneHost:NW750.HDB.ABAP SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
   register: config
-- debug: var=config.stdout_lines 
+- debug: var=config.stdout_lines
 
 #T #unzip 51050829_3.ZIP
 #T #/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
