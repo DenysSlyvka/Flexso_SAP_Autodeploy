@@ -96,15 +96,22 @@
 
 #Download UNRAR
 - name: Downloading unrar
-  command: geturl /tmp https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
-  register: unrar
-- debug: var=unrar.stdout_lines 
+
+  get_url:
+    url: https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
+    dest: /tmp
+    mode: '0777'
 
 #Extract unrar
 - name: extracing unrar 
   command: tar -zxvf /tmp/rarlinux-x64-5.6.0.tar.gz
   register: unrar
 - debug: var=unrar.stdout_lines 
+
+- name: Extracing Unrar 
+  unarchive:
+    src: /tmp/rarlinux-x64-5.6.0.tar.gz
+    dest: /usr/local/bin
 
 #Unrar rars
 - name: extracting abap dir 1 
