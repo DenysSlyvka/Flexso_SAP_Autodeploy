@@ -138,6 +138,7 @@
     path: /Netweaver
     group: sapinst
     owner: root
+    state: directory
     mode: '0777'
 
 #Chdir to the required install directory for Netweaver & run the command to start installation
