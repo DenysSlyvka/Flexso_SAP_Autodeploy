@@ -95,24 +95,24 @@
 
 
 #Download UNRAR
-- name: Installing netweaver
+- name: Downloading unrar
   command: wget -P /tmp https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
   register: unrar
 - debug: var=unrar.stdout_lines 
 
 #Extract unrar
-- name: Installing netweaver
+- name: extracing unrar 
   command: tar -zxvf /tmp/rarlinux-x64-5.6.0.tar.gz
   register: unrar
 - debug: var=unrar.stdout_lines 
 
 #Unrar rars
-- name: Installing netweaver
+- name: extracting abap dir 1 
   command: /usr/local/bin/rar/unrar x /SAP/NetWeaver/NetWeaver/51052160_part2.rar
   register: unrar
 - debug: var=unrar.stdout_lines 
 
-- name: Installing netweaver
+- name: extracting abap dir 2
   command: /usr/local/bin/rar/unrar x /SAP/NetWeaver/NetWeaver/51052161_part2.rar
   register: unrar
 - debug: var=unrar.stdout_lines 
