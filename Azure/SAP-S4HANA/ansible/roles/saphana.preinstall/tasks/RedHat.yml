@@ -96,7 +96,7 @@
 
 #Download UNRAR
 - name: Downloading unrar
-  command: wget -P /tmp https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
+  command: geturl /tmp https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
   register: unrar
 - debug: var=unrar.stdout_lines 
 
