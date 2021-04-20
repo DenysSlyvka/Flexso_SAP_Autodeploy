@@ -38,7 +38,7 @@
 # Runs hdblcm in batchmode with configfile 'install.rsp'
 # install.rsp currently works using a master password
 - name: Installing SAP HANA Database
-  shell: /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --configfile=/SAP/HDB/51054623/install.rsp
+  shell: /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --sid={{ sid }} --hostname={{ hostname }} --number={{ instancenr }} --configfile=/SAP/HDB/51054623/install.rsp
   ignore_errors: yes
   register: config
 - debug: var=config.stdout_lines
