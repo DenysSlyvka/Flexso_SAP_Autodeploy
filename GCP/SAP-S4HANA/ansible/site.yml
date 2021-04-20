@@ -3,4 +3,5 @@
 - hosts: localhost
   become: true
   roles:
-    - saphana.preinstall
+    - sap.hana-db
+    - sap.netweaver-abap
