@@ -2,7 +2,7 @@
 - hosts: localhost
   become: true
   vars_files:
-    - /var/tmp/external_vars.yml
+    - /external_vars.yml
   roles:
     - sap.hana-db
  #   - sap.netweaver-abap
