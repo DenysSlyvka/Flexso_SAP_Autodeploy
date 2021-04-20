@@ -124,8 +124,13 @@
 #   register: unrar
 # - debug: var=unrar.stdout_lines 
 
-- name: SAPCAR SWPM
-  shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/NetWeaver/NetWeaver/SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
+# - name: SAPCAR SWPM
+#   shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/NetWeaver/NetWeaver/SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
+
+#Add sapinst group
+- name: Add group sapinst
+  command: groupadd sapinst
+  ignore_errors: yes
 
 - name: Add group sapinst
   command: groupadd sapinst
@@ -138,6 +143,7 @@
     group: sapinst
     state: directory
     owner: root
+    state: directory
     mode: '0777'
 
 #Chdir to the required install directory for Netweaver & run the command to start installation
