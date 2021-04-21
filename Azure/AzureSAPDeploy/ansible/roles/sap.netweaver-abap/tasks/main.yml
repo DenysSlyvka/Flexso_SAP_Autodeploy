@@ -1,0 +1,8 @@
+# roles/ROLENAME/tasks/main.yml
+---
+
+- name: Include OS-specific variables
+  include_vars: RedHat.yml
+
+- include_tasks: RedHat.yml
+  when: ansible_os_family == 'RedHat'
