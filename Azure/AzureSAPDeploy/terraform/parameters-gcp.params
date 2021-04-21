@@ -1,0 +1,115 @@
+##########################################################################################################################################################################################
+#                                                                                                                                                                                        #
+# Installation service 'SAP NetWeaver 7.5 > SAP HANA Database > Installation > Application Server ABAP > Standard System > Standard System', product id 'NW_ABAP_OneHost:NW750.HDB.ABAP' #
+#                                                                                                                                                                                        #
+##########################################################################################################################################################################################
+# IMPORTANT DO NOT DELETE!!! SAPInstDes25Hash=$AcAyjSN/9P4F$8r0njy8tKW+hXEdSHmnc9Z1ndkZdFCnJ4ynwbdjZiky+OGg4TDaFIJEQl4A1XPGuQvFocVbK6+3iSQc2595VjP2GH5fhrkEw
+
+# The name of the database schema.
+HDB_Schema_Check_Dialogs.schemaName = SAPABAP1
+
+# The password of the database schema.
+HDB_Schema_Check_Dialogs.schemaPassword = Admin2020
+
+# Use SAP HANA Media on CD, do not ask for SAR archives
+HDB_Software_Dialogs.useMediaCD = true
+
+# SAP code page. Value for Unicode is: '4103' on little endian (intel), '4102' on big endian. Value for Non-Unicode is: '1100' or country specific.
+NW_ABAP_Import_Dialog.dbCodepage = 4103
+
+# Number of parallel Migration Monitor jobs
+NW_ABAP_Import_Dialog.migmonJobNum = 96
+
+# Additional 'R3load' arguments for the LOAD phase
+NW_ABAP_Import_Dialog.migmonLoadArgs = -c 100000 -rowstorelist /tmp/sapinst_instdir/NW750/HDB/INSTALL/STD/ABAP/rowstorelist.txt
+
+# Standard system with AS ABAP only: ASCS instance number. Leave empty for default.
+NW_CI_Instance.ascsInstanceNumber = 01
+
+# Standard system with AS ABAP only: Virtual host name for the ASCS instance. Leave empty for default.
+NW_CI_Instance.ascsVirtualHostname = myvm
+
+# Instance number of the primary application server instance. Leave empty for default.
+NW_CI_Instance.ciInstanceNumber = 00
+
+# Virtual host name of the primary application server instance . Leave empty for default.
+NW_CI_Instance.ciVirtualHostname = myvm
+
+# Standard system with AS Java only: Virtual host name for the SCS instance. Leave empty for default.
+NW_CI_Instance.scsVirtualHostname = myvm
+
+# Distributed installation or system copy with any database and SAP Basis release 740 or higher: Execute ABAP program 'RUTPOADAPT' for depooling. Set it to 'true' if declustering / depooling is selected for the distributed database instance installation option.
+NW_CI_Instance_ABAP_Reports.executeReportsForDepooling = true
+
+# Are the passwords for the DDIC users different from the default value? Possible values are 'true' or 'false'. Leave empty for default.
+NW_DDIC_Password.needDDICPasswords = false
+
+# Master password
+NW_GetMasterPassword.masterPwd = Admin2020
+
+# The SAP system ID <SAPSID> of the system to be installed
+NW_GetSidNoProfiles.sid = A11
+
+# ABAP schema name
+NW_HDB_DB.abapSchemaName = SAPABAP1
+
+# Password of the ABAP schema user
+NW_HDB_DB.abapSchemaPassword = Admin2020
+
+# Database host
+NW_HDB_getDBInfo.dbhost = myvm
+
+# Database system ID
+NW_HDB_getDBInfo.dbsid = A10
+
+# The instance number of the SAP HANA database server
+NW_HDB_getDBInfo.instanceNumber = 14
+
+# Password of user 'SYSTEM' inside the SAP HANA database server
+NW_HDB_getDBInfo.systemPassword = Admin2020
+# SAP HANA system ID
+NW_HDB_getDBInfo.systemid = A10
+
+# Connect using SSL/TLS. Default value: false.
+NW_HDB_getDBInfo.usingSSL = true
+
+# DEPRECATED, DO NOT USE!
+# NW_SAPCrypto.SAPCryptoFile = /SAP/NetWeaver/NetWeaver/SAPEXE_700-80002573.SAR
+
+# DEPRECATED, DO NOT USE!
+# NW_Unpack.igsExeSar = /SAP/NetWeaver/NetWeaver/igsexe_12-80003187.sar
+
+# DEPRECATED, DO NOT USE!
+# NW_Unpack.igsHelperSar = /SAP/NetWeaver/NetWeaver/igshelper_17-10010245.sar
+
+# DEPRECATED, DO NOT USE!
+# W_Unpack.sapExeDbSar = /SAP/NetWeaver/NetWeaver/SAPEXEDB_900-70001624.SAR
+
+# DEPRECATED, DO NOT USE!
+# NW_Unpack.sapExeSar = /SAP/NetWeaver/NetWeaver/SAPEXE_700-80002573.SAR
+
+# The FQDN of the system
+NW_getFQDN.FQDN =
+
+# The load type chosen by the user. Valid values are: 'SAP', 'STD', 'OBR', 'HCP', 'FLASHCOPY', 'MDA', 'HBR', 'SBR'
+NW_getLoadType.loadType = SAP
+
+# The folder containing all archives that have been downloaded from http://support.sap.com/swdc and are supposed to be used in this procedure
+archives.downloadBasket = /SAP/NetWeaver/NetWeaver
+
+# Specify whether a Table Placement Parameters file 'HdbTablePlacementParameters.SQL' is to be used. Possible values are 'USEFILE', 'DONOTUSEFILE'. Default value is 'USEFILE'.
+hanadb.landscape.reorg.useParameterFile = DONOTUSEFILE
+
+# UNIX only: The group id of the 'sapsys' group, leave empty for default. The ID is ignored if the group already exists.
+nwUsers.sapsysGID = 79
+
+# The password of the '<sapsid>adm' user
+nwUsers.sidadmPassword = Admin2020
+
+SAPINST.CD.PACKAGE.RDBMS-HDB-CLIENT=/SAP/HDB/51054623/
+
+SAPINST.CD.PACKAGE.EXPORT1=/SAP/NetWeaver/NetWeaver/DATA_UNITS/EXP1/
+
+SAPINST.CD.PACKAGE.EXPORT2=/SAP/NetWeaver/NetWeaver/DATA_UNITS/EXP2/
+
+SAPINST.CD.PACKAGE.EXPORT3=/SAP/NetWeaver/NetWeaver/DATA_UNITS/EXP3/
