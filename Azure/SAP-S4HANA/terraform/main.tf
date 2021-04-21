@@ -266,7 +266,7 @@ resource "null_resource" "provision_vm" {
             "echo install pexpect", 
             "echo downloading pexpect 3.3 repo into yum", 
             "sudo wget https://download.opensuse.org/repositories/home:uibmz:opsi:opsi40/RHEL_7/home:uibmz:opsi:opsi40.repo -P /etc/yum.repos.d", 
-            "echo installing python with yum", 
+            "echo installing python with yum",  
             "sudo yum install -y python-pexpect", 
             "echo install compat-sap-c++-7-7.2.1-2.el7_4",  
             "sudo rpm -ivh ftp://ftp.pbone.net/mirror/ftp.scientificlinux.org/linux/scientific/7.8/x86_64/os/Packages/compat-sap-c++-7-7.2.1-2.el7_4.x86_64.rpm", 

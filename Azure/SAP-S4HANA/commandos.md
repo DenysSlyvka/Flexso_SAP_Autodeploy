@@ -53,3 +53,12 @@ ansible-playbook Flexso_SAP_Autodeploy/Azure/SAP-S4HANA/ansible/site.yml
 sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/SAPEXEDB_800-80002572.SAR /SAP/NetWeaver
 
  sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/SAPEXE_800-80002573.SAR /SAP/NetWeaver
+
+
+# JAVA Install
+## Unrar JAVA software
+/usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_JAVA_part2.rar
+
+## Untar ASE DB software
+
+
