@@ -1,0 +1,57 @@
+#Create NetWeaver install files dir
+- name: Create /SAP/NetWeaver directory
+  file:
+    path: /SAP/NetWeaver
+    state: directory
+    mode: '0777'
+    owner: root
+
+#Check if NetWeaver install files have already been downloaded
+- name: Check if NetWeaver files exist
+  stat:
+    path: /SAP/NetWeaver/parameters-gcp.params
+  register: NetWeaver_data
+
+#Download netweaver install files from ftp server
+- name: Download NetWeaver files
+  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NetWeaver /SAP/NetWeaver
+  when: not NetWeaver_data.stat.exists
+  async: 9999
+  poll: 5
+
+#Unzip install files
+- name: Check if DATA_UNITS is already unzipped in NetWeaver
+  stat:
+    path: /SAP/NetWeaver/NetWeaver/DATA_UNITS
+  register: DATA_UNITS_NW
+
+- name: Unzip files inside /SAP/NetWeaver/NetWeaver
+  unarchive:
+    src: /SAP/NetWeaver/NetWeaver/51050829_3.ZIP
+    dest: /SAP/NetWeaver/NetWeaver
+  when: not DATA_UNITS_NW.stat.exists
+
+#Sapcar SWPM
+- name: SAPCAR SWPM
+  shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/NetWeaver/NetWeaver/SWPM10SP31_2-20009701.SAR -R /SAP/NetWeaver/SWPM
+
+# Add the usergroup sapinst so ownership of /Netweaver can be set to this group
+- name: Add group sapinst
+  command: groupadd sapinst
+  ignore_errors: yes
+  become: yes
+
+#Netweaver will be installed here
+- name: Create /Netweaver directory
+  file:
+    path: /Netweaver
+    state: directory
+    group: sapinst
+    owner: root
+    mode: '0777'
+
+#Chdir to the required install directory for Netweaver & run the command to start installation
+- name: Installing netweaver
+  command: chdir=/Netweaver /SAP/NetWeaver/SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NetWeaver/NetWeaver/parameters-gcp.params SAPINST_EXECUTE_PRODUCT_ID=NW_ABAP_OneHost:NW750.HDB.ABAP SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
+  register: config
+- debug: var=config.stdout_lines

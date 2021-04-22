@@ -1,0 +1,4 @@
+# roles/ROLENAME/vars/RedHat.yml
+#
+# Distribution-specific variables for RHEL, CentOS, ...
+---
