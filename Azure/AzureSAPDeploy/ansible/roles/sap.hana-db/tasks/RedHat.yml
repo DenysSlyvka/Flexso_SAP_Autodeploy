@@ -14,7 +14,7 @@
     mode: '0777'
     owner: root
 
-# Check if HDB directorie is empty
+# Check if HDB directory is empty
 # This is so the download task can be skipped when playbook is run multiple times
 - name: Check if HDB files exist
   stat:
