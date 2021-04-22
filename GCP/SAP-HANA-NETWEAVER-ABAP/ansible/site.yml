@@ -5,4 +5,4 @@
     - /external_vars.yml
   roles:
     - sap.hana-db
- #   - sap.netweaver-abap
+    - sap.netweaver-abap
