@@ -16,7 +16,7 @@
 #     state: installed
 #   ignore_errors: yes
 
-# Disks
+# #Disks
 # - name: vgextend /dev/rootvg /dev/sdc
 #   command: vgextend /dev/rootvg /dev/sdc
 #   ignore_errors: yes

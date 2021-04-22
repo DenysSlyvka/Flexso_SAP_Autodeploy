@@ -2,8 +2,10 @@
 ---
 - hosts: localhost
   become: true
+  vars_files:
+    - /tmp/external_vars.yml
   roles:
     - sap.azure-preinstall
     - sap.hana-db
     - sap.netweaver-abap
-    - sap.abap-foundation
+    #- sap.abap-foundation
