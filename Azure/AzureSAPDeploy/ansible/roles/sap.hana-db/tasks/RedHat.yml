@@ -49,7 +49,7 @@
 
 # Runs hdblcm in batchmode with configfile 'install.rsp'
 - name: Installing SAP HANA Database
-  shell: cat /SAP/HDB/installAzure.rsp | /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/SAP/HDB/installAzure.rsp -b
+  shell: cat /SAP/HDB/51054623/installAzure.rsp | /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/SAP/HDB/51054623/installAzure.rsp -b
   ignore_errors: yesexit
   register: config
 - debug: var=config.stdout_lines
