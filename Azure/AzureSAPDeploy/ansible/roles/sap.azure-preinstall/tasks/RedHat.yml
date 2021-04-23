@@ -14,17 +14,3 @@
     name: java
     state: installed
   ignore_errors: yes
-
-#Disks
-# - name: vgextend /dev/rootvg /dev/sdc
-#   command: vgextend /dev/rootvg /dev/sdc
-#   ignore_errors: yes
-
-# - name: lvextend -l +100%FREE /dev/rootvg/rootlv
-#   command: lvextend -l +100%FREE /dev/rootvg/rootlv
-#   ignore_errors: yes
-
-# - name: resize2fs /dev/rootvg/rootlv
-#   command: resize2fs /dev/rootvg/rootlv
-#   ignore_errors: yes
-
