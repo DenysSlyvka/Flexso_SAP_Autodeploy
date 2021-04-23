@@ -1,0 +1,13 @@
+---
+galaxy_info:
+  author: Werner De Schryver
+  description: Installs an SAP HANA Database server on target host according to parameters set in a seperate file.
+  license: BSD
+  min_ansible_version: 2.0
+  platforms:
+    - name: EL
+      versions:
+        - 8
+  galaxy_tags:
+    - system
+dependencies: []
