@@ -63,7 +63,7 @@ function Input-Params-HDB
 
     cd $path
     terraform init
-    terraform plan -out sap-terraformplan.tfplan
+    terraform plan -out sap-terraformplan.tfplan -var="hostname=$hostname"
     terraform apply sap-terraformplan.tfplan
 }
 
