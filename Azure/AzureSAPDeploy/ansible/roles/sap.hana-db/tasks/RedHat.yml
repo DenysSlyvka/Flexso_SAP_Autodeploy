@@ -28,6 +28,14 @@
   async: 9999
   poll: 5
 
+
+#Download files from FTP server
+- name: Download HANA files
+  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/HANA-PLATFORM/compat-sap-c++-9-9.1.1-2.3.el7_6.x86_64.rpm /SAP/HDB
+  when: not HDB_data.stat.exists
+  async: 9999
+  poll: 5
+
 #Install compat-sap-c++-9 rpm package
 - name: Download C++9
   command: rpm --install /SAP/HDB/compat-sap-c++-9-9.1.1-2.3.el7_6.x86_64.rpm
@@ -41,7 +49,7 @@
 
 # Runs hdblcm in batchmode with configfile 'install.rsp'
 - name: Installing SAP HANA Database
-  shell: cat /SAP/HDB/installAzure.rsp | /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/SAP/HDB/installAzure.rsp -b
+  shell: cat /SAP/HDB/51054623/installAzure.rsp | /SAP/HDB/51054623/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm --read_password_from_stdin=xml --configfile=/SAP/HDB/51054623/installAzure.rsp -b
   ignore_errors: yesexit
   register: config
 - debug: var=config.stdout_lines
