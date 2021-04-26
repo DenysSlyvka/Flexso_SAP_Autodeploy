@@ -23,6 +23,12 @@
   ignore_errors: yes
   become: yes
 
+  # Add the usergroup sapinst so ownership of /Netweaver can be set to this group
+- name: Add group sapsys
+  command: groupadd sapsys
+  ignore_errors: yes
+  become: yes
+
 #Netweaver will be installed here
 - name: Create /JAVA directory
   file:
