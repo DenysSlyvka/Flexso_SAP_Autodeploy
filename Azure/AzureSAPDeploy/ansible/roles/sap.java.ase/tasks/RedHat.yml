@@ -15,7 +15,7 @@
 
 #Sapcar SWPM
 - name: SAPCAR SWPM
-  shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/JAVA/SWPM10SP31_3-20009701.SAR -R /SAP/SWPM
+  shell: /SAP/JAVA/SAPCAR_1010-70006178.EXE -xvf /SAP/JAVA/SWPM10SP31_3-20009701.SAR -R /SAP/SWPM
 
 # Add the usergroup sapinst so ownership of /Netweaver can be set to this group
 - name: Add group sapinst
