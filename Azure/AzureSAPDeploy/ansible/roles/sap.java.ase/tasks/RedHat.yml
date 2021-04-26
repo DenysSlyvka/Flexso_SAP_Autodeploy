@@ -1,0 +1,34 @@
+#Create NetWeaver install files dir
+- name: Create /SAP/JAVA directory
+  file:
+    path: /SAP/JAVA
+    state: directory
+    mode: '0777'
+    owner: root
+
+#Download netweaver install files from ftp server
+- name: Download NetWeaver files
+  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NW_JAVA/* /SAP/JAPA
+  when: not NetWeaver_data.stat.exists
+  async: 9999
+  poll: 5
+
+#Sapcar SWPM
+- name: SAPCAR SWPM
+  shell: /SAP/NetWeaver/NetWeaver/SAPCAR_1010-70006178.EXE -xvf /SAP/JAVA/SWPM10SP31_3-20009701.SAR -R /SAP/SWPM
+
+# Add the usergroup sapinst so ownership of /Netweaver can be set to this group
+- name: Add group sapinst
+  command: groupadd sapinst
+  ignore_errors: yes
+  become: yes
+
+#Netweaver will be installed here
+- name: Create /JAVA directory
+  file:
+    path: /JAVA
+    group: sapinst
+    state: directory
+    owner: root
+    state: directory
+    mode: '0777'
