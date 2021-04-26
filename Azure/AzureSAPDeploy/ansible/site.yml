@@ -6,6 +6,6 @@
     - /tmp/external_vars.yml
   roles:
     - sap.azure-preinstall
-    - sap.hana-db
-    - sap.netweaver-abap
+    #- sap.hana-db
+    #- sap.netweaver-abap
     #- sap.abap-foundation
