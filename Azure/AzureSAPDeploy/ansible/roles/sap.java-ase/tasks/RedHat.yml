@@ -8,14 +8,14 @@
 
 #Download netweaver install files from ftp server
 - name: Download NetWeaver files
-  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NW_JAVA/* /SAP/JAVA
+  command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NW_JAVA/ /SAP/JAVA
   when: not NetWeaver_data.stat.exists
   async: 9999
   poll: 5
 
 #Sapcar SWPM
 - name: SAPCAR SWPM
-  shell: /SAP/JAVA/SAPCAR_1010-70006178.EXE -xvf /SAP/JAVA/SWPM10SP31_3-20009701.SAR -R /SAP/SWPM
+  shell: /SAP/JAVA/NW_JAVA/SAPCAR_1010-70006178.EXE -xvf /SAP/JAVA/SWPM10SP31_3-20009701.SAR -R /SAP/JAVA/SWPM
 
 # Add the usergroup sapinst so ownership of /Netweaver can be set to this group
 - name: Add group sapinst
