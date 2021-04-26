@@ -6,7 +6,7 @@
     #- /tmp/external_vars.yml
   roles:
     - sap.azure-preinstall
-    - sap.java.ase
+    - sap.java-ase
     #- sap.hana-db
     #- sap.netweaver-abap
     #- sap.abap-foundation
