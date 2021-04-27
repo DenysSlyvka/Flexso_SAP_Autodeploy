@@ -14,7 +14,7 @@
 
 #Sapcar SWPM
 - name: SAPCAR SWPM
-  shell: /SAP/JAVA/NW_JAVA/SAPCAR_1010-70006178.EXE -xvf /SAP/JAVA/SWPM10SP31_3-20009701.SAR -R /SAP/JAVA/SWPM
+  shell: /SAP/JAVA/SAPCAR_1010-70006178.EXE -xvf /SAP/JAVA/SWPM10SP31_3-20009701.SAR -R /SAP/JAVA/SWPM
 
 # Add the usergroup sapinst so ownership of /Netweaver can be set to this group
 - name: Add group sapinst
@@ -35,5 +35,4 @@
     group: sapinst
     state: directory
     owner: root
-    state: directory
     mode: '0777'
