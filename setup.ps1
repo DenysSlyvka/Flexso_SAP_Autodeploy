@@ -53,13 +53,19 @@ function Input-Params-HDB
 ---
 "@
     $exampleFile | Out-File -Encoding utf8 $path\external_vars.yml # C:\Users\Dirk\Documents\GitHub\Flexso_SAP_Autodeploy\GCP
-    $hostname = Read-Host -Prompt 'Enter hostname of the virtual machine [default: "myvm"]'
+    $hostname = Read-Host -Prompt 'Enter hostname of the virtual machine [default: myvm]'
     $sid = Read-Host -Prompt 'Enter SID for HDB server'
     $instancenr = Read-Host -Prompt 'Enter instance number for HDB server'
+    $nwsid = Read-Host -Prompt 'Enter the SID for NetWeaver [Must be different from the SID for HDB]'
+    $ascsinstancenr = Read-Host -Prompt 'Enter the ASCS instance number for Netweaver [default: 01]'
+    $primaryinstancenr = Read-Host -Prompt 'Enter the instance number for the primary application server [default: 00]'
 
     Add-Content $Path\external_vars.yml "hostname: $hostname"
     Add-Content $Path\external_vars.yml "sid: $sid"
-    Add-Content $Path\external_vars.yml "instancenr: $instancenr"
+    Add-Content $Path\external_vars.yml "instancenr: '$instancenr'"
+    Add-Content $Path\external_vars.yml "nwsid: $nwsid"
+    Add-Content $Path\external_vars.yml "ascsinstancenr: '$ascsinstancenr'"
+    Add-Content $Path\external_vars.yml "primaryinstancenr: '$primaryinstancenr'"
 
     cd $path
     terraform init
