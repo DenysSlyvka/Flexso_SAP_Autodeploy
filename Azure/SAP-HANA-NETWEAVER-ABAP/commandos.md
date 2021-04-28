@@ -53,36 +53,3 @@ ansible-playbook Flexso_SAP_Autodeploy/Azure/SAP-S4HANA/ansible/site.yml
 sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/SAPEXEDB_800-80002572.SAR /SAP/NetWeaver
 
  sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/SAPEXE_800-80002573.SAR /SAP/NetWeaver
-
-
-## INSTALLATIE VAN JAVA ASE | NW_Java_OneHost:NW750.SYB.PD
-yum install libnsl -y
-
-
-# Export bestanden ophalen
-unzip /SAP/NW_JAVA/51050829_3.ZIP -d /SAP/NW_JAVA
-
-# Kernel bestanden unzippen
-unzip /SAP/JAVA/51051432_3.ZIP -d /SAP/NW_JAVA  (Overschrijft sommige bestanden)
-
-# ASE PAKKET
-unzip /SAP/NW_JAVA/51054690_1.ZIP -d /SAP/NW_JAVA
-
-# Unzippen van ASE Server
-tar -zxvf /SAP/NW_JAVA/ASESERV160004_0-20012052.TGZ -C /SAP/NW_JAVA
-
-# Insallatie TAR
-wget -P /tmp https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
-
-# Unzippen van tar in de root folder
-tar -zxvf /tmp/rarlinux-x64-5.6.0.tar.gz
-
-# JAVA PACKAGE J2EEONSIDEP
-/rar/unrar x /SAP/NW_JAVA/51050829_JAVA_part2.rar -d /SAP/NW_JAVA
-
-# JAVA PAKCAGE LANGUAGE
-/rar/unrar x /SAP/NW_JAVA/51050829_LNG1_part2.rar -d /SAP/NW_JAVA
-
-
-/SAP/SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NW_JAVA/NetWeaver/inifileAZURE_JAVA.params SAPINST_EXECUTE_PRODUCT_ID=NW_Java_OneHost:NW750.SYB.PD SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
- 

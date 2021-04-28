@@ -250,7 +250,6 @@ resource "null_resource" "provision_vm" {
             "sudo yum install ansible -y", 
             "sudo yum install git -y", 
             "sudo yum install rsync -y", 
-            "sudo yum install libnsl -y",
             "sudo yum install sshpass -y", 
             "sudo yum install -y tcsh",
             "sudo yum install libatomic -y", 
