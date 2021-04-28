@@ -17,7 +17,7 @@ provider "azurerm" {
 //Create virtual network
 ///The following section creates a resource group named Flexso-Stage-TestEnv in the westeurope location:
 resource "azurerm_resource_group" "saptestautodeploygroup" {
-  name = "Flexso-Stage-TestEnv-Denys"
+  name = "Flexso-Stage-Azure-HANADB-ABAP"
   location = "westeurope"
 }
 
@@ -234,71 +234,36 @@ resource "null_resource" "provision_vm" {
             agent       = "false"
     }
 
-    # provisioner "local-exec" {
-    #     command = "ssh -i ${tls_private_key.example_ssh.private_key_pem} azureuser@${azurerm_public_ip.myterraformpublicip.ip_address}"
-    #     depends_on = [
-    #         azurerm_public_ip.myterraformpublicip
-    #     ]
-    #  }
 
-
-    provisioner "file" {
-        source      = "centos1.repo"
-        destination = "/var/tmp/centos1.repo"
+   provisioner "file" {
+        source      = "external_vars.yml"
+        destination = "/tmp/external_vars.yml"
     }
 
 
 
     provisioner "remote-exec" {
         inline = [
-            "echo Move centos1.repo to /etc/yum.repos.d/",
-            "sudo mv /var/tmp/centos1.repo /etc/yum.repos.d/",
-            "echo chowning root repo",
-            "sudo chown root:root /etc/yum.repos.d/centos1.repo",
-            "echo updating repos",
-            "sudo yum update -y --disablerepo='*' --enablerepo='*microsoft*'",
-            "echo installing EPEL Repo",
-            "sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y",
-            "echo disable bad repo",
-            "sudo yum-config-manager --disable rhel-ha-for-rhel-7-server-eus-rhui-rpms",
-            "echo yuminstall nmap -y",
-            "sudo yum install nmap -y", 
-            "echo install pexpect", 
-            "echo downloading pexpect 3.3 repo into yum", 
-            "sudo wget https://download.opensuse.org/repositories/home:uibmz:opsi:opsi40/RHEL_7/home:uibmz:opsi:opsi40.repo -P /etc/yum.repos.d", 
-            "echo installing python with yum", 
-            "sudo yum install -y python-pexpect", 
-            "echo install compat-sap-c++-7-7.2.1-2.el7_4",  
-            "sudo rpm -ivh ftp://ftp.pbone.net/mirror/ftp.scientificlinux.org/linux/scientific/7.8/x86_64/os/Packages/compat-sap-c++-7-7.2.1-2.el7_4.x86_64.rpm", 
-            "echo install litool-ltdl",  
-            "sudo yum install -y libtool-ltdl", 
-            "echo install libatomic", 
-            "sudo yum install -y libatomic", 
-            "echo install ansbile",
-            "sudo yum install -y ansible",
-            "echo yum install git", 
-            "sudo yum -y install git", 
-            "echo install FTP",
-            "sudo yum install -y ftp",
-            "git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git", 
-            "sudo ansible-playbook ~/Flexso_SAP_Autodeploy/Azure/SAP-HANA-EXPRESS/ansible/site.yml" 
+            "sudo yum update -y",
+            "sudo subscription-manager register --username zegerpe@cronos.be --password cgMZv6vp9G --auto-attach",
+            "sudo subscription-manager repos --enable ansible-2.8-for-rhel-8-x86_64-rpms", 
+            "sudo yum install ansible -y", 
+            "sudo yum install git -y", 
+            "sudo yum install rsync -y", 
+            "sudo yum install sshpass -y", 
+            "sudo yum install -y tcsh",
+            "sudo yum install libatomic -y", 
+            "sudo yum install libtool-ltdl -y",
+            "sudo vgextend /dev/rootvg /dev/sdc",
+            "sudo lvextend -l +75%FREE /dev/rootvg/rootlv",
+            "sudo lvextend -l +5%FREE /dev/rootvg/tmplv",
+            "sudo lvextend -l +20%FREE /dev/rootvg/usrlv",
+            "sudo xfs_growfs -d /",
+            "sudo xfs_growfs -d /tmp",
+            "sudo xfs_growfs -d /usr",
+            "sudo git clone https://github.com/DenysSlyvka/Flexso_SAP_Autodeploy.git",
+            "sudo ansible-playbook Flexso_SAP_Autodeploy/Azure/AzureSAPDeploy/ansible/site.yml"
         ]  
         on_failure = continue
     }
 }
-
-
-//In de pipeline, zijn de gegevens van de login 
-//Moet in ansbile toegevoegd worden
-/*
-yum install -y ftp
-sftp flexsostageadmin@51.103.26.163
-cd ftp
-lcd /home/azureuser/Downloads
-get HXEDownloadManager_linux.bin
-
-
-
-Username: 	flexsostageadmin
-Pass:		Flexsostageadmin2020
-*/
