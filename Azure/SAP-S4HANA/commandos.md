@@ -52,19 +52,13 @@ ansible-playbook Flexso_SAP_Autodeploy/Azure/SAP-S4HANA/ansible/site.yml
 # OPhalen van kernel files voor ABAP
 sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/SAPEXEDB_800-80002572.SAR /SAP/NetWeaver
 
-sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/SAPEXE_800-80002573.SAR /SAP/NetWeaver
+ sftp flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/SAPEXE_800-80002573.SAR /SAP/NetWeaver
 
 
-
-#Ophalen van 
 # JAVA Install
 ## Unrar JAVA software
 /usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_JAVA_part2.rar
 
-## Download INI file
-sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NW_JAVA/inifileAZURE_JAVA.params /SAP/NW_JAVA
-
-## Install JAVA
-./sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NW_JAVA/inifileAZURE_JAVA.params SAPINST_EXECUTE_PRODUCT_ID=NW_Java_OneHost:NW750.SYB.PD SAPST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
+## Untar ASE DB software
 
 

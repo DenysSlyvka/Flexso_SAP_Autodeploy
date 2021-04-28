@@ -243,28 +243,15 @@ resource "null_resource" "provision_vm" {
 
 
     provisioner "file" {
-        source      = "external_vars.yml"
-        destination = "/"
+        source      = "centos1.repo"
+        destination = "/var/tmp/centos1.repo"
     }
-
-
 
 
 
     provisioner "remote-exec" {
         inline = [
-
-
-            
-            vgextend /dev/rootvg /dev/sdc
-            lvextend -l +75%FREE /dev/rootvg/rootlv
-            lvextend -l +5%FREE /dev/rootvg/tmplv
-            lvextend -l +20%FREE /dev/rootvg/usrlv
-
-            xfs_growfs -d /
-            xfs_growfs -d /tmp
-            xfs_growfs -d /usr
-           
+            "echo Move centos1.repo to /etc/yum.repos.d/",
             "sudo mv /var/tmp/centos1.repo /etc/yum.repos.d/",
             "echo chowning root repo",
             "sudo chown root:root /etc/yum.repos.d/centos1.repo",
