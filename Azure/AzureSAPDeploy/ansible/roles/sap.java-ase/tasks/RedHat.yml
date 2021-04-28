@@ -6,6 +6,14 @@
     mode: '0777'
     owner: root
 
+#Create NetWeaver install files dir
+- name: Create /SAP/JAVA directory
+  file:
+    path: /SAP/NW_JAVA/51050829
+    state: directory
+    mode: '0777'
+    owner: root    
+
 #Download netweaver install files from ftp server
 - name: Download NetWeaver files
   command: sshpass -p 'Flexsostageadmin2020' rsync -e "ssh -o StrictHostKeyChecking=no" -alPvz flexsostageadmin@51.103.26.163:/home/flexsostageadmin/ftp/NW_JAVA/ /SAP/NW_JAVA
@@ -36,3 +44,71 @@
     state: directory
     owner: root
     mode: '0777'
+
+#Export van bestanden
+- name: Extracing NW JAVA based SW comp 
+  unarchive:
+    src: /SAP/NW_JAVA/51050829_3.ZIP
+    dest: /SAP/NW_JAVA/51050829
+
+- name: Extracing SAP Kernel 7.49 
+  unarchive:
+    src: /SAP/NW_JAVA/51051432_3.ZIP
+    dest: /SAP/NW_JAVA/
+  
+- name: Extracing SAP ASE 16.0.04.00 SAP ASE 16.0.04.00
+  unarchive:
+    src: /SAP/NW_JAVA/51054690_1.ZIP
+    dest: /SAP/NW_JAVA/
+
+- name: Extracing SAP ASE SERVER
+  command: tar -zxvf /SAP/NW_JAVA/ASESERV160004_0-20012052.TGZ -C /SAP/NW_JAVA
+
+- name: extracing unrar 
+  command: tar -zxvf /tmp/rarlinux-x64-5.6.0.tar.gz
+  register: unrar
+- debug: var=unrar.stdout_lines 
+
+- name: Extracing Unrar 
+  unarchive:
+    src: /tmp/rarlinux-x64-5.6.0.tar.gz
+    dest: /usr/local/bin
+
+#Unrar rars
+- name: extracting abap dir 1 
+  command: /usr/local/bin/rar/unrar /SAP/NW_JAVA/51050829_JAVA_part2.rar -d /SAP/NW_JAVA
+  register: unrar
+- debug: var=unrar.stdout_lines 
+
+- name: extracting abap dir 2
+  command: /usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_JAVA_part2.rar -d /SAP/NW_JAVA
+  register: unrar
+- debug: var=unrar.stdout_lines 
+
+#Bestanden aanpassen 
+- name: Nofile hard limit toevoegen aan limits.conf
+  command: echo @sapsys hard nofile 32800 >> /etc/security/limits.conf
+
+- name: Nofile soft limit toevoegen aan limits.conf
+  command: echo @sapsys soft nofile 32800 >> /etc/security/limits.conf
+
+#Swapfile maken
+- name: Nofile hard limit toevoegen aan limits.conf
+  command: sudo fallocate -l 30G /swapfile
+
+- name: Nofile hard limit toevoegen aan limits.conf
+  command: sudo chmod 600 /swapfile
+
+- name: Nofile hard limit toevoegen aan limits.conf
+  command: sudo mkswap /swapfile
+
+- name: Nofile hard limit toevoegen aan limits.conf
+  command: sudo swapon /swapfile
+
+- name: Nofile hard limit toevoegen aan limits.conf
+  command: echo /swapfile swap swap defaults 0 0 >> /etc/fstab
+
+- name: Nofile hard limit toevoegen aan limits.conf
+  command: echo @sapsys hard nofile 32800 >> /etc/security/limits.conf
+
+#Juist nog de automatic install doen
