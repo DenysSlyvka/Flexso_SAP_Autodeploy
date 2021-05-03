@@ -81,7 +81,7 @@
 - debug: var=unrar.stdout_lines 
 
 - name: extracting abap dir 2
-  command: /usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_JAVA_part2.rar -d /SAP/NW_JAVA
+  command: /usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_LNG1_part2.rar -d /SAP/NW_JAVA
   register: unrar
 - debug: var=unrar.stdout_lines 
 
