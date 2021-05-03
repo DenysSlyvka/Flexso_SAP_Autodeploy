@@ -64,10 +64,8 @@
 - name: Extracing SAP ASE SERVER
   command: tar -zxvf /SAP/NW_JAVA/ASESERV160004_0-20012052.TGZ -C /SAP/NW_JAVA
 
-- name: extracing unrar 
-  command: tar -zxvf /tmp/rarlinux-x64-5.6.0.tar.gz
-  register: unrar
-- debug: var=unrar.stdout_lines 
+- name: Download Unrar
+  command: wget -P /tmp https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
 
 - name: Extracing Unrar 
   unarchive:
@@ -76,12 +74,12 @@
 
 #Unrar rars
 - name: extracting abap dir 1 
-  command: /usr/local/bin/rar/unrar /SAP/NW_JAVA/51050829_JAVA_part2.rar -d /SAP/NW_JAVA
+  command: /usr/local/bin/rar/unrar xy /SAP/NW_JAVA/51050829_JAVA_part2.rar -d -y /SAP/NW_JAVA
   register: unrar
 - debug: var=unrar.stdout_lines 
 
 - name: extracting abap dir 2
-  command: /usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_LNG1_part2.rar -d /SAP/NW_JAVA
+  command: /usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_LNG1_part2.rar -d -y /SAP/NW_JAVA
   register: unrar
 - debug: var=unrar.stdout_lines 
 
