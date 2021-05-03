@@ -111,6 +111,6 @@
 
 #Chdir to the required install directory for Netweaver & run the command to start installation
 - name: Installing netweaver
-  command: chdir=/JAVA /SAP/SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NeNW_JAVA/inifileAZURE_JAVA.params APINST_EXECUTE_PRODUCT_ID=NW_ABAP_OneHost:NW750.HDB.ABAP SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
+  command: chdir=/JAVA /SAP/SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NW_JAVA/inifileAZURE_JAVA.params SAPINST_EXECUTE_PRODUCT_ID=NW_Java_OneHost:NW750.SYB.PD SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
   register: config
 - debug: var=config.stdout_lines 
