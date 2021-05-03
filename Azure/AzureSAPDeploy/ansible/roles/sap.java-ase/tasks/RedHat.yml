@@ -74,7 +74,7 @@
 
 #Unrar rars
 - name: extracting abap dir 1 
-  command: /usr/local/bin/rar/unrar xy /SAP/NW_JAVA/51050829_JAVA_part2.rar -d -y /SAP/NW_JAVA
+  command: /usr/local/bin/rar/unrar x /SAP/NW_JAVA/51050829_JAVA_part2.rar -d -y /SAP/NW_JAVA
   register: unrar
 - debug: var=unrar.stdout_lines 
 
@@ -109,4 +109,8 @@
 - name: Nofile hard limit toevoegen aan limits.conf
   command: echo @sapsys hard nofile 32800 >> /etc/security/limits.conf
 
-#Juist nog de automatic install doen
+#Chdir to the required install directory for Netweaver & run the command to start installation
+- name: Installing netweaver
+  command: chdir=/JAVA /SAP/SWPM/sapinst SAPINST_INPUT_PARAMETERS_URL=/SAP/NeNW_JAVA/inifileAZURE_JAVA.params APINST_EXECUTE_PRODUCT_ID=NW_ABAP_OneHost:NW750.HDB.ABAP SAPINST_SKIP_DIALOGS=true SAPINST_START_GUISERVER=false
+  register: config
+- debug: var=config.stdout_lines 
