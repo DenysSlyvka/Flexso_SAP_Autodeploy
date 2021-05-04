@@ -2,5 +2,8 @@
 ---
 - hosts: localhost
   become: true
+  vars_files:
+    #- /tmp/external_vars.yml
   roles:
-    - saphana.preinstall
+    - sap.azure-preinstall
+    - sap.hana-db

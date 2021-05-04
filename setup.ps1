@@ -53,6 +53,7 @@ function Input-Params-HDB
 ---
 "@
     $exampleFile | Out-File -Encoding utf8 $path\external_vars.yml # C:\Users\Dirk\Documents\GitHub\Flexso_SAP_Autodeploy\GCP
+    $resourcegroupname = Read-Host -Prompt 'Enter resource group name [default: Azure_SAP_Automatic_Install]'
     $hostname = Read-Host -Prompt 'Enter hostname of the virtual machine [default: myvm]'
     $sid = Read-Host -Prompt 'Enter SID for HDB server'
     $instancenr = Read-Host -Prompt 'Enter instance number for HDB server'
@@ -69,7 +70,7 @@ function Input-Params-HDB
 
     cd $path
     terraform init
-    terraform plan -out sap-terraformplan.tfplan -var="hostname=$hostname"
+    terraform plan -out sap-terraformplan.tfplan -var="hostname=$hostname","resourcegroupname=$resourcegroupname"
     terraform apply sap-terraformplan.tfplan
 }
 

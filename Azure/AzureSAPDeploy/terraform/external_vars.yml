@@ -1,5 +1,0 @@
-#this file contains input variables for hana
----
-hostname: myvm
-sid: A10
-instancenr: 14
