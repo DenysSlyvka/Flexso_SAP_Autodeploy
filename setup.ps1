@@ -20,7 +20,7 @@ function Show-Menu-Setup-Azure
     Write-Host "================ $Title ================"
     Write-Host "1: SAP HANA Database + NetWeaver ABAP"
     Write-Host "2: SAP HANA Express (test)"
-    Write-Host "3: SAP HANA Database + ABAP Foundation"
+    Write-Host "3: SAP JAVA ASE"
     Write-Host "Q: Press 'Q' to quit."
 }
 
@@ -101,15 +101,11 @@ function Input-Params-JAVA
     $exampleFile | Out-File -Encoding utf8 $path\external_vars.yml # C:\Users\Dirk\Documents\GitHub\Flexso_SAP_Autodeploy\GCP
     $resourcegroupname = Read-Host -Prompt 'Enter resource group name [default: Azure_SAP_Automatic_Install]'
     $hostname = Read-Host -Prompt 'Enter hostname of the virtual machine [default: myvm]'
-    $sid = Read-Host -Prompt 'Enter SID for HDB server'
-    $instancenr = Read-Host -Prompt 'Enter instance number for HDB server'
-    $nwsid = Read-Host -Prompt 'Enter the SID for NetWeaver [Must be different from the SID for HDB]'
-    $ascsinstancenr = Read-Host -Prompt 'Enter the ASCS instance number for Netweaver [default: 01]'
+    $nwsid = Read-Host -Prompt 'Enter the SID for JAVA [Must be different from the SID for HDB]'
+    $ascsinstancenr = Read-Host -Prompt 'Enter the SCS instance number for JAVA [default: 01]'
     $primaryinstancenr = Read-Host -Prompt 'Enter the instance number for the primary application server [default: 00]'
 
     Add-Content $Path\external_vars.yml "hostname: $hostname"
-    Add-Content $Path\external_vars.yml "sid: $sid"
-    Add-Content $Path\external_vars.yml "instancenr: '$instancenr'"
     Add-Content $Path\external_vars.yml "nwsid: $nwsid"
     Add-Content $Path\external_vars.yml "ascsinstancenr: '$ascsinstancenr'"
     Add-Content $Path\external_vars.yml "primaryinstancenr: '$primaryinstancenr'"
@@ -141,7 +137,7 @@ Show-Menu-Platform –Title 'Choose platform'
             } '3' {
                 
                 $path = '..\Flexso_SAP_Autodeploy\Azure\SAP-ASE-JAVA\terraform'
-                Input-Params-HDB -Path $path
+                Input-Params-JAVA -Path $path
               
              } 'q' {
                  return
