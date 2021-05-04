@@ -8,9 +8,3 @@
 - name: Installing linux package repository for microsoft products
   command: rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
   ignore_errors: yes
-
-- name: Installing java
-  yum:
-    name: java
-    state: installed
-  ignore_errors: yes

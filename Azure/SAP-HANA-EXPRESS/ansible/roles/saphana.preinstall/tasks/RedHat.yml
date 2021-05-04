@@ -17,15 +17,15 @@
   ignore_errors: yes
 
 #Disks
-- name: vgextend /dev/rootvg /dev/sdc
+- name: Extend free disc space
   command: vgextend /dev/rootvg /dev/sdc
   ignore_errors: yes
 
-- name: lvextend -l +100%FREE /dev/rootvg/rootlv
+- name: User free disk space for root directory
   command: lvextend -l +100%FREE /dev/rootvg/rootlv
   ignore_errors: yes
 
-- name: resize2fs /dev/rootvg/rootlv
+- name: Assign disk space to rootlv
   command: resize2fs /dev/rootvg/rootlv
   ignore_errors: yes
 
@@ -66,12 +66,7 @@
       (.*)password(.*): "Flexsostageadmin2020"
       (.*)connecting(.*): "yes"
 
-#Run HXEDownloadManager_linux.bin --ph {{ private_ip }} ...
-# - name: List contents of /home/werner_deschryver/Downloads
-#   command: ls /home/werner_deschryver/Downloads
-#   register: contents
-
-- name: Change permissions inside /home/werner_deschryver/Downloads
+- name: Change permissions inside /home/azureuser/Downloads
   file:
     path: /home/azureuser/Downloads
     mode: '0777'

@@ -1,8 +1,0 @@
----
-- name: Molecule test playbook
-  hosts: all
-  become: true
-  vars:
-  # Define role variables here
-  roles:
-    - role: bertvv.ROLENAME
